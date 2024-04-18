@@ -1,0 +1,86 @@
+{
+    "category": [
+        "Men's Clothing"
+    ],
+    "currency": "EUR",
+    "customer_first_name": "Ahmed Al",
+    "customer_full_name": "Ahmed Al Morris",
+    "customer_gender": "MALE",
+    "customer_id": 4,
+    "customer_last_name": "Morris",
+    "customer_phone": "",
+    "day_of_week": "Tuesday",
+    "day_of_week_i": 1,
+    "email": "ahmed al@morris-family.zzz",
+    "manufacturer": [
+        "Low Tide Media",
+        "Microlutions"
+    ],
+    "order_date": "2024-04-23T19:53:46+00:00",
+    "order_id": 586554,
+    "products": [
+        {
+            "base_price": 11.99,
+            "discount_percentage": 0,
+            "quantity": 1,
+            "manufacturer": "Low Tide Media",
+            "tax_amount": 0,
+            "product_id": 11968,
+            "category": "Men's Clothing",
+            "sku": "ZO0441604416",
+            "taxless_price": 11.99,
+            "unit_discount_amount": 0,
+            "min_price": 6.11,
+            "_id": "sold_product_586554_11968",
+            "discount_amount": 0,
+            "created_on": "2016-12-27T19:53:46+00:00",
+            "product_name": "Polo shirt - light grey multicolor",
+            "price": 11.99,
+            "taxful_price": 11.99,
+            "base_unit_price": 11.99
+        },
+        {
+            "base_price": 32.99,
+            "discount_percentage": 0,
+            "quantity": 1,
+            "manufacturer": "Microlutions",
+            "tax_amount": 0,
+            "product_id": 19031,
+            "category": "Men's Clothing",
+            "sku": "ZO0113501135",
+            "taxless_price": 32.99,
+            "unit_discount_amount": 0,
+            "min_price": 15.51,
+            "_id": "sold_product_586554_19031",
+            "discount_amount": 0,
+            "created_on": "2016-12-27T19:53:46+00:00",
+            "product_name": "SLIM FIT - Slim fit jeans - stone blue",
+            "price": 32.99,
+            "taxful_price": 32.99,
+            "base_unit_price": 32.99
+        }
+    ],
+    "sku": [
+        "ZO0441604416",
+        "ZO0113501135"
+    ],
+    "taxful_total_price": 44.98,
+    "taxless_total_price": 44.98,
+    "total_quantity": 2,
+    "total_unique_products": 2,
+    "type": "order",
+    "user": "ahmed",
+    "geoip": {
+        "country_iso_code": "AE",
+        "location": {
+            "lon": 54.4,
+            "lat": 24.5
+        },
+        "region_name": "Abu Dhabi",
+        "continent_name": "Asia",
+        "city_name": "Abu Dhabi"
+    },
+    "event": {
+        "dataset": "sample_ecommerce"
+    }
+}
