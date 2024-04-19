@@ -2,10 +2,13 @@
   "name": "opensearch-typescript",
   "version": "0.0.3",
   "description": "Typescript types for the Opensearch Query DSL",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "commonjs",
   "scripts": {
-    "test": "jest"
+    "build": "tsc",
+    "test": "jest",
+    "prepublish": "tsc"
   },
   "engines": {
     "node": ">=14.15.0"

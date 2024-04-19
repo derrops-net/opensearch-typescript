@@ -10,12 +10,12 @@
     "removeComments": true,
     "sourceMap": true,
     "target": "ES2020",
-    "outDir": "lib",
-    "module": "commonjs"
+    "outDir": "dist",
+    "module": "es2020",
+    "declaration": true
   },
   "include": [
-    "src/**/*.ts",
-    "serverless.ts"
+    "src",
   ],
   "exclude": [
     "node_modules/**/*",
