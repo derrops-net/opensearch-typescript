@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Typescript types for the Opensearch Query DSL",
   "main": "index.ts",
+  "type": "commonjs",
   "scripts": {
     "test": "jest"
   },
