@@ -1,4 +1,8 @@
+<!-- https://www.tsmean.com/articles/how-to-write-a-typescript-library/ -->
+
 # Coding Typescript Search
+
+
 
 For this tutorial I'll be using the sample data provided by opensearch
  - opensearch_dashboards_sample_data_logs
