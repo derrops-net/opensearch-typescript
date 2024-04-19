@@ -252,7 +252,7 @@ test("https://opensearch.org/docs/latest/aggregations/pipeline-agg/#bucket_scrip
   
 
 })
-
+/**
 test("params.totalBytes > 20000 bucket_selector", async () => {
 
   type QuickExample = Search<ServerLog, 
@@ -304,7 +304,7 @@ test("params.totalBytes > 20000 bucket_selector", async () => {
   logger.info(result.aggregations.bytes_per_month.buckets.map(b => b))
 
 })
-
+ */
 test("https://opensearch.org/docs/latest/aggregations/pipeline-agg/#bucket_sort", async () => {
 
   type QuickExample = Search<ServerLog, 

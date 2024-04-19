@@ -37,7 +37,7 @@ export interface Geoip {
     city_name:        string;
 }
 
-export interface Location extends GeoPoint {
+export interface Location {
     lon: number;
     lat: number;
 }
