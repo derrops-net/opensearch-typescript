@@ -1,18 +1,18 @@
 import * as os from "@opensearch-project/opensearch"
 import * as logger from "../logger"
-import { TypescriptESProxy } from "../typescriptES"
+import { TypescriptOSProxyClient } from "../typescriptOS"
 import { makeClientWithEndpoint } from "../testUtil"
 import { ServerLog } from "./ServerLog"
 import { Search } from "../search"
 
 var esClient : os.Client
-var tsClient : TypescriptESProxy
+var tsClient : TypescriptOSProxyClient
 
 jest.setTimeout(20_000)
 
 beforeAll(async () => {
     esClient = await makeClientWithEndpoint()
-    tsClient = new TypescriptESProxy(esClient)
+    tsClient = new TypescriptOSProxyClient(esClient)
 })
 
 afterAll(

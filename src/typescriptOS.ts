@@ -20,7 +20,7 @@ export type DictResponse<T, MSEARCH extends { [a : string] : q.Search<T, AggsQue
 
 export type MSearch<T> = { [key : string] : q.Search<T, AggsQuery>}
 
-export class TypescriptESProxy {
+export class TypescriptOSProxyClient {
 
     esClient: os.Client
 

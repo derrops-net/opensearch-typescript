@@ -1,5 +1,5 @@
 import * as os from "@opensearch-project/opensearch"
-import { TypescriptESProxy } from "./typescriptES"
+import { TypescriptOSProxyClient } from "./typescriptOS"
 
 import { ServerLog } from "./tests/ServerLog"
 
@@ -11,11 +11,11 @@ import { makeClientWithEndpoint } from "./testUtil"
 const INDEX_LOGS = "opensearch_dashboards_sample_data_logs"
 
 var esClient : os.Client
-var tsClient : TypescriptESProxy
+var tsClient : TypescriptOSProxyClient
 
 beforeAll(async () => {
     esClient = await makeClientWithEndpoint()
-    tsClient = new TypescriptESProxy(esClient)
+    tsClient = new TypescriptOSProxyClient(esClient)
 })
 
 
