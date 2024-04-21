@@ -10,7 +10,7 @@ To use this library, create the `TypescriptOSProxyClient` client by wrapping the
 new TypescriptOSProxyClient(client)
 ```
 
-To have strongly typed query and reponses, the requirement is to define a `Search<T,A extends AggsQuery>` whereby `T` represents the type of your document in the index, and `A` is a description of the aggregation query you are planning to perform, which contains the nested aggregration structure, as well as the type of aggregation looking to be performed. With `T` & `A` this provides typescript with enough information to calculate the type of the response from opensearch. For example lets look at the sample ecommerce data and do a query to find the average baes price in a category:
+To have strongly typed query and reponses, the requirement is to define a `Search<T,A extends AggsQuery>` whereby `T` represents the type of your document in the index, and `A` is a description of the aggregation query you are planning to perform, which contains the nested aggregration structure, as well as the type of aggregation looking to be performed. With `T` & `A` this provides typescript with enough information to calculate the type of the response from opensearch. For example lets look at the sample ecommerce data and do a query to find the average baes price in a category. I used [quicktype](https://quicktype.io/) to generate the type `Ecommerce` which can be found [here](docs/files/Ecommerce.ts).
 
 ```typescript
   type AvgBasePriceByCategoryQuery = Search<Ecommerce, {
