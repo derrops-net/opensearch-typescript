@@ -13,7 +13,7 @@ new TypescriptOSProxyClient(client)
 To have strongly typed query and reponses, the requirement is to define a `Search<T,A extends AggsQuery>` whereby `T` represents the type of your document in the index, and `A` is a description of the aggregation query you are planning to perform, which contains the nested aggregration structure, as well as the type of aggregation looking to be performed. With `T` & `A` this provides typescript with enough information to calculate the type of the response from opensearch. For example lets look at the sample ecommerce data and do a query to find the average baes price in a category:
 
 ```typescript
-  type AvgBasePriceByCategoryQuery = ot.Search<Ecommerce, {
+  type AvgBasePriceByCategoryQuery = Search<Ecommerce, {
     category : {
       agg : "terms",
       aggs : {
@@ -31,12 +31,31 @@ Now when we write this query we get autocomplete suggestions, and highlighting f
 Then to do the search:
 
 ```typescript
+const search : AvgBasePriceByCategoryQuery = 
+{
+    "size": 0,
+    "aggs": {
+    "category": {
+        "terms": {
+        "field": "category.keyword"
+        },
+        "aggs" : {
+        "avg_base_price_in_category" : {
+            "avg" : {
+            "field" : "products.base_price"
+            }
+        }
+        }
+    }
+    }
+}
+
 const result = await tsClient.searchTS({
     body : search,
     index : "opensearch_dashboards_sample_data_ecommerce"
 })
 ```
-The `result` object you'll notice is strongly typed, having a type of:
+Whilst you will have to specify the `type` of the `search` object, as it's not possible to infer types for this case, however the `result` object you'll notice is strongly typed, having a type of:
 ``` typescript
 const result: SearchResponse<Ecommerce, {
     category: {
