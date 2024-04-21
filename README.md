@@ -10,7 +10,7 @@ To use this library, create the `TypescriptOSProxyClient` client by wrapping the
 new TypescriptOSProxyClient(client)
 ```
 
-To have strongly typed query and reponses, the requirement is to define a `Search<T,A extends AggsQuery>` whereby `T` represents the type of your document in the index, and `A` is a description of the aggregation query you are planning to perform, which contains the nested aggregration structure, as well as the type of aggregation looking to be performed. With `T` & `A` this provides typescript with enough information to calculate the type of the response from opensearch. For example lets look at the sample ecommerce data and do a query to find the average baes price in a category. I used [quicktype](https://quicktype.io/) to generate the type `Ecommerce` which can be found [here](docs/files/Ecommerce.ts).
+To have strongly typed query and responses, the requirement is to define a `Search<T,A extends AggsQuery>` whereby `T` represents the type of your document in the index, and `A` is a description of the aggregation query you are planning to perform, which contains the nested aggregation structure, as well as the type of aggregation looking to be performed. With `T` & `A` this provides typescript with enough information to calculate the type of the response from opensearch. For example lets look at the sample ecommerce data and do a query to find the average baes price in a category. I used [quicktype](https://quicktype.io/) to generate the type `Ecommerce` which can be found [here](docs/files/Ecommerce.ts).
 
 ```typescript
   type AvgBasePriceByCategoryQuery = Search<Ecommerce, {
@@ -90,10 +90,10 @@ I have support thus for for:
  - `boolean`
  - `GeoPoint`
 
-I plan to have strong types for other firelds in the future, for not strings can be used.
+I plan to have strong types for other fields in the future, for not strings can be used.
 
 ## Multi-search Limitation
-I was not able to map individual values in a dictionary to different types. This meant I couldn't map a collection of requests to a strongly typed collection of reponses. The work-around for this was to store the respones of each invidual request back onto itself. Because the type information of the request remained in-tact after execution, this was the only way to all the type information in type-script. Obviousily this has some paradigm drawbacks, mutating requests as opposed to immutability and functional paradigms It also requires different code if you were to refactor existing opensearh code to make use of this library.
+I was not able to map individual values in a dictionary to different types. This meant I couldn't map a collection of requests to a strongly typed collection of responses. The work-around for this was to store the responses of each individual request back onto itself. Because the type information of the request remained in-tact after execution, this was the only way to all the type information in type-script. Obviously this has some paradigm drawbacks, mutating requests as opposed to immutability and functional paradigms It also requires different code if you were to refactor existing opensearh code to make use of this library.
 
 
 

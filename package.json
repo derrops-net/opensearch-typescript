@@ -36,5 +36,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/derrops-net/opensearch-typescript.git"
-  }
+  },
+  "keywords": [
+    "opensearch",
+    "types",
+    "typescript",
+    "query"
+  ]
 }
