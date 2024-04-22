@@ -29,8 +29,8 @@ export type Hits<T> = {
 }
 
 export type Source<T> = {
-    includes? : att.AnyAttributeValue<T>[],
-    excludes? : att.AnyAttributeValue<T>[],
+    includes? : att.AnyAttribute<T>[],
+    excludes? : att.AnyAttribute<T>[],
 }
 
 

@@ -8,7 +8,7 @@ export type ValueCountAgg<T> = {
 }
 
 export type StatsAgg<T> = {
-    stats : fields.NumberField<T>
+    stats : fields.StatsField<T>
 }
 
 export type ScriptedMetricAgg = {
@@ -21,19 +21,19 @@ export type ScriptedMetricAgg = {
 }
 
 export type PercentilesAgg<T> = {
-    percentiles : fields.NumberField<T>
+    percentiles : fields.AnyField<T>
 }
 
 export type PercentileRanksAgg<T> = {
     "percentile_ranks": {
-        "field": a.NumberAtt<T>,
+        "field": a.AnyAttribute<T>,
         "values": number[]
       }
 }
 
 export type MatrixStats<T> = {
     matrix_stats : {
-        fields : a.ValueAtt<T>[]
+        fields : a.StatsAttribute<T>[]
     }
 }
 
@@ -109,11 +109,11 @@ export type MaxBucketPipeAgg = {
 }
 
 export type TermsAgg<T> = {
-    terms : fields.TermsAggInput<T>
+    terms : fields.AnyField<T>
 }
 
 export type AvgAgg<T> = {
-    avg : fields.ValueField<T>
+    avg : fields.StatsField<T>
 }
 
 export type ExtendedStatsAgg<T> = {
@@ -125,7 +125,7 @@ export type ExtendedStatsAgg<T> = {
 export type HistAgg<T> = {
     histogram : {
         interval : number | string
-    } & fields.ValueField<T>
+    } & fields.StatsField<T>
 }
 
 export type DateHistBucketAgg<T> = {
@@ -140,15 +140,15 @@ export type SumAgg<T> = {
 } 
 
 export type MinAgg<T> = {
-    min : fields.ValueField<T>
+    min : fields.StatsField<T>
 }
 
 export type MaxAgg<T> = {
-    max : fields.ValueField<T>
+    max : fields.StatsField<T>
 }
 
 export type CardAgg<T> = {
-    cardinality : fields.ValueField<T>
+    cardinality : fields.AnyField<T>
 }
 
 export type DiversifiedAgg<T> = {
@@ -186,7 +186,7 @@ export type TopHitsAgg = {
 
 export type RangeAgg<T> = {
     range : {
-        field : a.ValueAtt<T>,
+        field : a.StatsAttribute<T>,
         keyed : boolean,
         ranges : {from : number | Date, to : number | Date}[]
     }

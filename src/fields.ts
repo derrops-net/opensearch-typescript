@@ -11,33 +11,21 @@ export type Field<T> = {
 /**
  * Field representing a date
  */
-export type AnyField<T> = Field<a.AnyAttribute<T>>
 
-/**
- * Field representing a date
- */
-export type DateField<T> = Field<a.DateAtt<T>>
-
-
-/**
- * Number Field input to an agg
- */
-export type NumberField<T> = Field<a.NumberAtt<T>>
-
-/**
- * Value Field input to an agg
- */
-export type ValueField<T> = Field<a.ValueAtt<T>>
-
-
-export type GeoPointField<T> = Field<a.GeoPointAtt<T>>
-
-/**
- * Text Field input to an agg
- */
-export type TextField<T> = Field<a.TextOrKeywordAtt<T>>
-
-
-export type TermsAggInput<T> = TextField<T> & {
+export type TermsAggInput<T> = AnyField<T> & {
     size? : number,
 }
+
+
+export type BooleanField<T> = Field<a.BooleanAtt<T>>
+export type SringField<T> = Field<a.StringAtt<T>>
+export type NumberField<T> = Field<a.NumberAtt<T>>
+export type DateField<T> = Field<a.DateAtt<T>>
+export type KeyWordField<T> = Field<a.KeyWord<T>>
+export type GeoPointField<T> = Field<a.GeoPointAtt<T>>
+
+
+export type AnyField<T> = Field<a.AnyAttribute<T>>
+export type StatsField<T> = Field<a.StatsAttribute<T>>
+
+export type TextOrKeywordField<T> = Field<a.TextOrKeywordAtt<T>>

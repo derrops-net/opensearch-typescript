@@ -36,14 +36,27 @@ type DeepKeysMatching<T, V> = T extends V ? "" :
 
 
 
+export type BooleanAtt<T> = DeepKeysMatching<T, boolean>
 export type StringAtt<T> = DeepKeysMatching<T, string>
 export type NumberAtt<T> = DeepKeysMatching<T, number>
 export type DateAtt<T> = DeepKeysMatching<T, Date>
 export type KeyWord<T> = addSuffix<StringAtt<T>, '.keyword'>
 export type GeoPointAtt<T> = DeepKeysMatching<T, GeoPoint>;
 
-export type TextOrKeywordAtt<T> = KeyWord<T> | StringAtt<T>
-export type ValueAtt<T> = NumberAtt<T> | DateAtt<T>
-export type AnyAttribute<T> = StringAtt<T> | NumberAtt<T> | DateAtt<T> | KeyWord<T>
-export type AnyAttributeValue<T> = StringAtt<T> | NumberAtt<T> | DateAtt<T>
-export type NonTextAttribute<T> = NumberAtt<T> | DateAtt<T> | KeyWord<T>
+
+export type AnyAttribute<T> = 
+  BooleanAtt<T> |
+  StringAtt<T> |
+  NumberAtt<T> |
+  DateAtt<T> |
+  KeyWord<T> |
+  GeoPointAtt<T>
+
+export type StatsAttribute<T> = 
+  NumberAtt<T> |
+  DateAtt<T>
+
+
+export type TextOrKeywordAtt<T> = 
+  KeyWord<T> |
+  StringAtt<T>
