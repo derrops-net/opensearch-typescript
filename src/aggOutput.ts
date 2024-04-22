@@ -1,5 +1,6 @@
 import { AggType, AggsQuery } from "./aggInput"
-import { ValueField } from "./fields"
+import { StatsField } from "./fields"
+
 import { Hits } from "./search"
 
 export type RangeString = {
@@ -35,7 +36,7 @@ export type PercentileRanksAggResp = {
 }
 
 export type MetricStatsElement<T> = {
-    "name" : ValueField<T>,
+    "name" : StatsField<T>,
     "count" : number,
     "mean" : number,
     "variance" : number,
