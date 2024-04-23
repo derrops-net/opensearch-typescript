@@ -1,4 +1,5 @@
 import { NumberAtt, DateAtt, KeyWord, StringAtt, AnyAttribute, TextOrKeywordAtt } from "./attributes"
+import { BooleanStatement } from "./search"
 
 
 type RangeDefaults<A> = {
@@ -96,7 +97,7 @@ export type FilterStatement<T> =
     AndStatement<T>
 
 export type BoolStatement<T> = {
-    bool : FilterStatement<T>
+    bool : BooleanStatement<T>
 }
 
 export type AndStatement<T> = {

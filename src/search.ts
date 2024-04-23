@@ -33,19 +33,20 @@ export type Source<T> = {
     excludes? : att.AnyAttribute<T>[],
 }
 
+export type BooleanStatement<T> = {
+    should? : f.FilterStatement<T>[],
+    filter? : f.FilterStatement<T>[],
+    must? : f.FilterStatement<T>[],
+    must_not? : f.FilterStatement<T>[],
+    minimum_should_match? : number,
+}
 
 /**
  * Query to select a sub-set of documents
  */
 export type OSQuery<T> = {
     match_all? : {},
-    bool? : {
-        should? : f.FilterStatement<T>[],
-        filter? : f.FilterStatement<T>[],
-        must? : f.FilterStatement<T>[],
-        must_not? : f.FilterStatement<T>[],
-        minimum_should_match? : number,
-    },
+    bool? : BooleanStatement<T>,
     nested? : {
         path : string,
         query : OSQuery<T>,
