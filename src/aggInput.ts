@@ -39,7 +39,8 @@ export type AggType =
     "date_histogram" |
     "top_hits" |
     "range" |
-    "filter"
+    "filter" |
+    "filters"
 
 
 
@@ -82,7 +83,8 @@ export type Agg<T> =
     agg.DateHistBucketAgg<T> |
     agg.TopHitsAgg |
     agg.RangeAgg<T> |
-    agg.FilterAgg<T>
+    agg.FilterAgg<T> |
+    agg.FiltersAgg<T>
 
 
 
@@ -125,6 +127,7 @@ type AggTypeDictionary<T, AT extends AggType> =
     AT extends "top_hits" ? agg.TopHitsAgg :
     AT extends "range" ? agg.RangeAgg<T> :
     AT extends "filter" ? agg.FilterAgg<T> :
+    AT extends "filters" ? agg.FiltersAgg<T> :
 never;
 
 

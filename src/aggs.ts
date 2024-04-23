@@ -197,3 +197,10 @@ export type RangeAgg<T> = {
 export type FilterAgg<T> = {
     filter : filter.FilterStatement<T>
 }
+
+export type FiltersAgg<T> = {
+    filters : {
+        filters : filter.FilterStatement<T>[],
+        other_bucket? : boolean
+    }
+}

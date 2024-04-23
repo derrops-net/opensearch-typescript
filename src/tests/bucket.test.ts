@@ -199,3 +199,56 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/filter/", async () 
   console.log(result.aggregations.low_value.avg_amount.value)
 
 })
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/filters/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    "200_os" : {
+      agg : "filters",
+      aggs : {
+        avg_amount : {
+          agg : "avg"
+        }
+      }
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "200_os": {
+        "filters": {
+          "other_bucket": true,
+          "filters": [
+            {
+              "term": {
+                "response" : 200
+              }
+            },
+            {
+              "term": {
+                "machine.os.keyword": "osx"
+              }
+            }
+          ]
+        },
+        "aggs": {
+          "avg_amount": {
+            "avg": {
+              "field": "bytes"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_ecommerce"})
+
+  console.log(result.aggregations["200_os"].avg_amount)
+  console.log(result.aggregations["200_os"].doc_count)
+
+})
