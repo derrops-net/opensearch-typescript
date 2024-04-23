@@ -140,6 +140,11 @@ export type TermsAggResp = {
     "sum_other_doc_count" : number,
 } & AggBucketsResponse
 
+
+export type FilterAggRespAgg<AGG> = {
+    doc_count : number
+} & AGG
+
 export type TermsAggRespAgg<AGG> = {
     "doc_count_error_upper_bound" : number,
     "sum_other_doc_count" : number,
@@ -211,6 +216,7 @@ export type RangeResp = {
 export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQuery> = 
     AGS extends object ? 
     ( 
+        AT extends "filter" ? FilterAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "terms" ? TermsAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "histogram" ? HistAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "date_histogram" ? DateHistAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
@@ -218,6 +224,7 @@ export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQu
         never
         
     ) :
+    AT extends "filter" ? FilterAggRespAgg<void> :
     AT extends "terms" ? TermsAggRespAgg<void> :
     AT extends "histogram" ? DateHistAggRespAgg<void> :
     AT extends "date_histogram" ? DateHistAggRespAgg<void> :

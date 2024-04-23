@@ -109,6 +109,11 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/date-range/", async
   {
     number_of_bytes : {
           agg : "date_range",
+          aggs : {
+            logs : {
+              agg : "avg"
+            }
+          }
       }
   }>
 
@@ -117,6 +122,13 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/date-range/", async
     "size": 0,
     "aggs": {
       "number_of_bytes": {
+        "aggs" : {
+          "logs" : {
+            "avg" : {
+              "field" : "memory"
+            }
+          }
+        },
         "date_range": {
           "field": "@timestamp",
           "format": "MM-yyyy",
@@ -139,5 +151,51 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/date-range/", async
     to : b.to,
     to_as_string : b.to_as_string,
     doc_count : b.doc_count,
+    avgMem : b.logs.value
   })))
+})
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/filter/", async () => {
+
+  type QuickExample = Search<Ecommerce, 
+  {
+    low_value : {
+      agg : "filter",
+      aggs : {
+        avg_amount : {
+          agg : "avg"
+        }
+      }
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "low_value": {
+        "filter": {
+          "range": {
+            "taxful_total_price": {
+              "lte": 50
+            }
+          }
+        },
+        "aggs": {
+          "avg_amount": {
+            "avg": {
+              "field": "taxful_total_price"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_ecommerce"})
+
+  console.log(result.aggregations.low_value.doc_count)
+  console.log(result.aggregations.low_value.avg_amount.value)
+
 })
