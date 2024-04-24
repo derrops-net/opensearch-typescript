@@ -81,12 +81,14 @@ export type TermsKeyword<T> = Terms<KeyWord<T>, string>
 export type TermsString<T> =  Terms<StringAtt<T>, string>
 export type TermsNumber<T> =  Terms<NumberAtt<T>, number>
 export type TermsDate<T> =  Terms<DateAtt<T>, Date>
+export type TermsBoolean<T> =  Terms<BooleanAtt<T>, boolean>
 
 export type TermsStatement<T> = 
     TermsKeyword<T> | 
     TermsString<T> | 
     TermsNumber<T> | 
-    TermsDate<T>
+    TermsDate<T> |
+    TermsBoolean<T>
 
 export type FilterStatement<T> = 
     WildCardStatement<T> | 
