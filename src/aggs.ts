@@ -112,6 +112,17 @@ export type TermsAgg<T> = {
     terms : fields.AnyField<T>
 }
 
+export type MultiTermsAgg<T> = {
+    multi_terms : {
+        terms : fields.AnyField<T>[]
+        order? : Partial<{
+            [key in a.AnyAttribute<T>] : "asc" | "desc"
+        }>
+        size? : number,
+        doc_count? : number
+    }
+}
+
 export type AvgAgg<T> = {
     avg : fields.StatsField<T>
 }
@@ -152,8 +163,11 @@ export type CardAgg<T> = {
 }
 
 export type DiversifiedAgg<T> = {
-    shard_size: number,
-    field : a.AnyAttribute<T>
+    diversified_ : {
+        shard_size: number,
+        field : a.AnyAttribute<T>,
+        max_docs_per_value? : number,
+    }
 }
 
 export type DateRangeBucketAgg<T> = {

@@ -145,6 +145,10 @@ export type FilterAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
 
+export type DiversifiedAggRespAgg<AGG> = {
+    doc_count : number
+} & AGG
+
 export type FiltersAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
@@ -153,6 +157,18 @@ export type TermsAggRespAgg<AGG> = {
     "doc_count_error_upper_bound" : number,
     "sum_other_doc_count" : number,
 } & AggBucketsResponseAgg<AGG>
+
+
+export type MultiTermsAggRespAgg<AGG> = {
+    "doc_count_error_upper_bound" : number,
+    "sum_other_doc_count" : number,
+    "buckets" : ({
+        key : string[] | number[],
+        key_as_string : string,
+        doc_count : number
+    } & AGG)[]
+}
+
 
 export type ValueAggResp = {
     value : number
@@ -220,18 +236,22 @@ export type RangeResp = {
 export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQuery> = 
     AGS extends object ? 
     ( 
+        AT extends "diversified_" ? DiversifiedAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "filters" ? FiltersAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "filter" ? FilterAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "terms" ? TermsAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
+        AT extends "multi_terms" ? MultiTermsAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "histogram" ? HistAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "date_histogram" ? DateHistAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "date_range" ? DateRangeAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         never
         
     ) :
+    AT extends "diversified_" ? DiversifiedAggRespAgg<void> :
     AT extends "filters" ? FiltersAggRespAgg<void> :
     AT extends "filter" ? FilterAggRespAgg<void> :
     AT extends "terms" ? TermsAggRespAgg<void> :
+    AT extends "multi_terms" ? MultiTermsAggRespAgg<void> :
     AT extends "histogram" ? DateHistAggRespAgg<void> :
     AT extends "date_histogram" ? DateHistAggRespAgg<void> :
     AT extends "date_range" ? DateRangeAggResp<void>:

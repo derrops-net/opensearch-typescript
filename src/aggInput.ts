@@ -40,7 +40,9 @@ export type AggType =
     "top_hits" |
     "range" |
     "filter" |
-    "filters"
+    "filters" |
+    "diversified_" |
+    "multi_terms"
 
 
 
@@ -84,7 +86,8 @@ export type Agg<T> =
     agg.TopHitsAgg |
     agg.RangeAgg<T> |
     agg.FilterAgg<T> |
-    agg.FiltersAgg<T>
+    agg.FiltersAgg<T> |
+    agg.MultiTermsAgg<T>
 
 
 
@@ -115,6 +118,7 @@ type AggTypeDictionary<T, AT extends AggType> =
     AT extends "max_bucket" ? agg.MaxBucketPipeAgg :
     AT extends "avg_bucket" ? agg.AvgBucketPipeAgg :
     AT extends "terms" ? agg.TermsAgg<T> :
+    AT extends "multi_terms" ? agg.MultiTermsAgg<T> :
     AT extends "avg" ? agg.AvgAgg<T> :
     AT extends "sum" ? agg.SumAgg<T> :
     AT extends "min" ? agg.MinAgg<T> :

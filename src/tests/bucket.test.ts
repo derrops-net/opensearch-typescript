@@ -156,6 +156,47 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/date-range/", async
 })
 
 
+test("https://opensearch.org/docs/latest/aggregations/bucket/diversified-sampler/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    sample : {
+          agg : "diversified_",
+          aggs : {
+            terms : {
+              agg : "terms"
+            }
+          }
+      }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "sample": {
+        "diversified_": {
+          "shard_size": 1000,
+          "field": "response"
+        },
+        "aggs": {
+          "terms": {
+            "terms": {
+              "field": "agent.keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+  
+      
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+  logger.info(result.aggregations.sample.doc_count)
+  logger.info(result.aggregations.sample.terms)
+})
+
+
 test("https://opensearch.org/docs/latest/aggregations/bucket/filter/", async () => {
 
   type QuickExample = Search<Ecommerce, 
@@ -199,6 +240,8 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/filter/", async () 
   console.log(result.aggregations.low_value.avg_amount.value)
 
 })
+
+
 
 
 test("https://opensearch.org/docs/latest/aggregations/bucket/filters/", async () => {
@@ -250,5 +293,42 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/filters/", async ()
 
   console.log(result.aggregations["200_os"].avg_amount)
   console.log(result.aggregations["200_os"].doc_count)
+
+})
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/multi-terms/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    "hot" : {
+      agg : "multi_terms",
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0, 
+    "aggs": {
+      "hot": {
+        "multi_terms": {
+          "terms": [
+            {
+              "field" : "agent.keyword"
+            },
+            {
+              "field" : "machine.os.keyword"
+            }
+          ]
+        }    
+      }
+    }
+  }
+  
+
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_ecommerce"})
+
+  console.log(result.aggregations)
 
 })
