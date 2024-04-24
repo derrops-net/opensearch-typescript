@@ -1,6 +1,6 @@
 {
   "name": "opensearch-typescript",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Typescript types for the Opensearch Query DSL",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
