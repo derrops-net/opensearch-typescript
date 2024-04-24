@@ -96,6 +96,5 @@ I plan to have strong types for other fields in the future, for not strings can 
 I was not able to map individual values in a dictionary to different types. This meant I couldn't map a collection of requests to a strongly typed collection of responses. The work-around for this was to store the responses of each individual request back onto itself. Because the type information of the request remained in-tact after execution, this was the only way to all the type information in type-script. Obviously this has some paradigm drawbacks, mutating requests as opposed to immutability and functional paradigms It also requires different code if you were to refactor existing opensearh code to make use of this library.
 
 
-
 ## Elasticsearch
 This same approach could be taken with Elasticsearch but unless adoption of this client takes off I don't plan to replicate this in Elasticsearch.
