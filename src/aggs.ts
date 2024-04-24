@@ -80,9 +80,7 @@ export type BucketScriptAgg = {
     }
 }
 
-export type BucketPipePatch = {
-    buckets_path : (string | {[a:string] : string})
-}
+export type BucketPipePatch = string | {[a:string] : string}
 
 export type SumBucketPipeAgg = {
     sum_bucket : BucketPipePatch
