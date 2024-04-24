@@ -66,7 +66,7 @@ export type BucketSortAgg = {
 
 export type BucketSelectorAgg = {
     bucket_selector: {
-        buckets_path: BucketPipePatch,
+        buckets_path: {[a:string] : string},
         script: string
       }
 }
