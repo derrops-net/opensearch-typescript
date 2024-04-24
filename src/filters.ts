@@ -1,3 +1,4 @@
+import { BooleanAtt } from "."
 import { NumberAtt, DateAtt, KeyWord, StringAtt, AnyAttribute, TextOrKeywordAtt } from "./attributes"
 import { BooleanStatement } from "./search"
 
@@ -64,13 +65,15 @@ export type Term<A extends string, V> = {"term" : Partial<{[key in A] : V}>}
 export type TermKeyword<T> = Term<KeyWord<T>, string>
 export type TermString<T> =  Term<StringAtt<T>, string>
 export type TermNumber<T> =  Term<NumberAtt<T>, number>
+export type TermBoolean<T> =  Term<BooleanAtt<T>, boolean>
 export type TermDate<T> =    Term<DateAtt<T>, Date>
 
 export type TermStatement<T> = 
     TermKeyword<T> | 
     TermString<T> | 
     TermDate<T> | 
-    TermNumber<T>
+    TermNumber<T> |
+    TermBoolean<T>
 
 export type Terms<A extends string, V> = {"terms" : Partial<{[key in A] : V[]}>}
 
