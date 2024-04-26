@@ -2,10 +2,18 @@ import * as fields from "./fields"
 import * as filter from "./filters"
 import * as a from "./attributes"
 
+
+
+export type GeohexGridAgg<T> = {
+    geohex_grid : {
+        precision : number,
+    } & fields.GeoPointField<T>
+}
+
 export type GeohashGridAgg<T> = {
     geohash_grid : {
         precision : number,
-    } & fields.AnyField<T>
+    } & fields.GeoPointField<T>
 }
 
 export type ValueCountAgg<T> = {

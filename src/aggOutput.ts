@@ -149,6 +149,13 @@ export type DiversifiedAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
 
+export type GeohexGridAggResp<AGG> = {
+    "buckets" : ({
+        "key" : string,
+        "doc_count" : number,
+      } & AGG)[]
+}
+
 export type GeohashGridAggResp<AGG> = {
     "buckets" : ({
         "key" : string,
@@ -256,6 +263,7 @@ export type RangeResp = {
 export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQuery> = 
     AGS extends object ? 
     ( 
+        AT extends "geohex_grid" ? GeohexGridAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "geohash_grid" ? GeohashGridAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "geo_distance" ? GeoDistanceAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "diversified_sampler" ? DiversifiedAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
@@ -269,6 +277,7 @@ export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQu
         never
         
     ) :
+    AT extends "geohex_grid" ? GeohexGridAggResp<void> :
     AT extends "geohash_grid" ? GeohashGridAggResp<void> :
     AT extends "geo_distance" ? GeoDistanceAggResp<void> :
     AT extends "diversified_sampler" ? DiversifiedAggRespAgg<void> :

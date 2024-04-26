@@ -431,3 +431,34 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/geohash-grid/", asy
   logger.info(result.aggregations.geo_hash)
 
 })
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/geohex-grid/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    "grouped" : {
+      agg : "geohex_grid"
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "grouped": {
+        "geohex_grid": {
+          "field": "geo.coordinates",
+          "precision": 1
+        }
+      }
+    }
+  }
+  
+  
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+  logger.info(result.aggregations)
+  logger.info(result.aggregations.grouped.buckets)
+
+})
