@@ -4,7 +4,27 @@ import * as a from "./attributes"
 
 import {RequireAtLeastOne} from "type-fest"
 
-export type IPRange<T> = {
+export type Sampler = {
+    sampler : {
+        shard_size : number
+    }
+}
+
+export type ReverseNestedAgg = {
+    reverse_nested : {}
+}
+
+
+export type NestedAgg<T> = {
+    nested: {
+        path: string
+    }
+}
+
+
+
+
+export type IPRangeAgg<T> = {
     ip_range : {
         ranges : RequireAtLeastOne<{
             from : string,
@@ -140,9 +160,9 @@ export type MaxBucketPipeAgg = {
 }
 
 export type TermsAgg<T> = {
-    size? : number,
     terms : fields.AnyField<T>,
-    missing : number | string | Date,
+    size? : number,
+    missing? : number | string | Date,
 }
 
 export type MultiTermsAgg<T> = {

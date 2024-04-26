@@ -3,6 +3,7 @@ import { StatsField } from "./fields"
 
 import { Hits } from "./search"
 
+
 export type RangeString = {
     from : string,
     to : string,

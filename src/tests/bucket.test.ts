@@ -534,3 +534,150 @@ type QuickExample = Search<ServerLog,
   logger.info(result.aggregations.access)
 
 })
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/nested/", async () => {
+  
+  type QuickExample = Search<ServerLog, 
+  {
+    "pages" : {
+      agg : "nested",
+      aggs : {
+        min_load_time : {
+          agg : "min"
+        }
+      }
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "query": {
+      "match": { "response.keyword": "200" }
+    },
+    "aggs": {
+      "pages": {
+        "nested": {
+          "path": "pages"
+        },
+        "aggs": {
+          "min_load_time": { "min": { "field": "geo.coordinates.lat" } }
+        }
+      }
+    }
+  }
+  
+
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+  logger.info(result.aggregations)
+
+})
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/reverse-nested/", async () => {
+  
+type QuickExample = Search<ServerLog, 
+{
+  "pages" : {
+    agg : "nested",
+    aggs : {
+      top_pages_per_load_time : {
+        agg : "terms",
+        aggs : {
+          comment_to_logs : {
+            agg : "reverse_nested",
+            aggs : {
+              min_load_time : {
+                agg : "min"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}>
+
+const search : QuickExample = 
+{
+  "query": {
+    "match": { "response": "200" }
+  },
+  "aggs": {
+    "pages": {
+      "nested": {
+        "path": "pages"
+      },
+      "aggs": {
+        "top_pages_per_load_time": {
+          "terms": {
+            "field" : "machine.ram"
+          },
+          "aggs": {
+            "comment_to_logs": {
+              "reverse_nested" : {},
+              "aggs": {
+                "min_load_time": {
+                  "min": {
+                    "field" : "machine.ram"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+logger.info(result.aggregations)
+
+})
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/sampler/", async () => {
+  
+type QuickExample = Search<ServerLog, 
+{
+  "sample" : {
+    agg : "sampler",
+    aggs : {
+      "terms" : {
+        "agg" : "terms"
+      }
+    }
+  }
+}>
+
+const search : QuickExample = 
+{
+  "size": 0,
+  "aggs": {
+    "sample": {
+      "sampler": {
+        "shard_size": 1000
+      },
+      "aggs": {
+        "terms": {
+          "terms": {
+            "field": "agent.keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+logger.info(result.aggregations)
+
+})

@@ -2,6 +2,7 @@ import { AggTypeDictionaryRecursive, AggsQuery } from "./aggInput"
 import { AggTypeResponseDictionary2 } from "./aggOutput"
 import * as att from "./attributes"
 import * as f from "./filters"
+import * as m from "./match"
 
 
 
@@ -64,6 +65,9 @@ export type OSQuery<T> = {
             _source? : Source<T>
         }
     }
+    match_phrase? : m.MatchPhrase<T>,
+    match? : m.Match<T>,
+
 } & Partial<f.FilterStatement<T>>
 
 
