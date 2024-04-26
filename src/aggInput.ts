@@ -5,6 +5,7 @@ import * as agg from "./aggs"
  * All supported Agg keys
  */
 export type AggType = 
+    "geotile_grid" |
     "geohex_grid" |
     "geohash_grid" |
     "geo_distance" |
@@ -54,6 +55,7 @@ export type AggType =
  * All supported JSON structure of Aggs
  */
 export type Agg<T> =
+    agg.GeotileGridAgg<T> |
     agg.GeohexGridAgg<T> |
     agg.GeohashGridAgg<T> |
     agg.GeoDistanceAgg<T> |
@@ -100,6 +102,7 @@ export type Agg<T> =
  * Map to describe JSON of each agg type
  */
 type AggTypeDictionary<T, AT extends AggType> = 
+    AT extends "geotile_grid" ? agg.GeotileGridAgg<T> :
     AT extends "geohex_grid" ? agg.GeohexGridAgg<T> :
     AT extends "geohash_grid" ? agg.GeohashGridAgg<T> :
     AT extends "geo_distance" ? agg.GeoDistanceAgg<T> :

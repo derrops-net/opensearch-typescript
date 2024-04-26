@@ -462,3 +462,35 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/geohex-grid/", asyn
   logger.info(result.aggregations.grouped.buckets)
 
 })
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/geotile-grid/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    "grouped" : {
+      agg : "geotile_grid"
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "grouped": {
+        "geotile_grid": {
+          "field": "geo.coordinates",
+          "precision": 1
+        }
+      }
+    }
+  }
+  
+  
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+  logger.info(result.aggregations)
+  logger.info(result.aggregations.grouped.buckets)
+
+})

@@ -4,6 +4,12 @@ import * as a from "./attributes"
 
 
 
+export type GeotileGridAgg<T> = {
+    geotile_grid : {
+        precision : number,
+    } & fields.GeoPointField<T>
+}
+
 export type GeohexGridAgg<T> = {
     geohex_grid : {
         precision : number,
