@@ -400,3 +400,34 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/geo-distance/", asy
   logger.info(result.aggregations.position.buckets.map(b => b.max_bytes.value))
 
 })
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/geohash-grid/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    "geo_hash" : {
+      agg : "geohash_grid"
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "geo_hash": {
+        "geohash_grid": {
+          "field": "geo.coordinates",
+          "precision": 4
+        }
+      }
+    }
+  }
+  
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+  logger.info(result.aggregations)
+  logger.info(result.aggregations.geo_hash)
+
+})

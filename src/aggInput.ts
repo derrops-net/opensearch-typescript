@@ -5,6 +5,7 @@ import * as agg from "./aggs"
  * All supported Agg keys
  */
 export type AggType = 
+    "geohash_grid" |
     "geo_distance" |
     "diversified_sampler" |
     "date_range" |
@@ -52,6 +53,7 @@ export type AggType =
  * All supported JSON structure of Aggs
  */
 export type Agg<T> =
+    agg.GeohashGridAgg<T> |
     agg.GeoDistanceAgg<T> |
     agg.DiversifiedAgg<T> |
     agg.DateRangeBucketAgg<T> |
@@ -96,6 +98,7 @@ export type Agg<T> =
  * Map to describe JSON of each agg type
  */
 type AggTypeDictionary<T, AT extends AggType> = 
+    AT extends "geohash_grid" ? agg.GeohashGridAgg<T> :
     AT extends "geo_distance" ? agg.GeoDistanceAgg<T> :
     AT extends "diversified_sampler" ? agg.DiversifiedAgg<T> :
     AT extends "date_range" ? agg.DateRangeBucketAgg<T> :
