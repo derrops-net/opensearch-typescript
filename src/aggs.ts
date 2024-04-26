@@ -140,7 +140,8 @@ export type MaxBucketPipeAgg = {
 }
 
 export type TermsAgg<T> = {
-    terms : fields.AnyField<T>
+    size? : number,
+    terms : fields.AnyField<T>,
 }
 
 export type MultiTermsAgg<T> = {
