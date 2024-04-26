@@ -142,6 +142,7 @@ export type MaxBucketPipeAgg = {
 export type TermsAgg<T> = {
     size? : number,
     terms : fields.AnyField<T>,
+    missing : number | string | Date,
 }
 
 export type MultiTermsAgg<T> = {
