@@ -13,7 +13,7 @@ export interface ServerLog {
     phpmemory: null;
     referer:   string;
     request:   string;
-    response:  number;
+    response:  string;
     tags:      string[];
     timestamp: Date;
     "@timestamp": Date;

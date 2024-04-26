@@ -149,6 +149,15 @@ export type DiversifiedAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
 
+export type GeoDistanceAggResp<AGG> = {
+    "buckets" : ({
+        "key" : string,
+        "from" : number,
+        "to" : number,
+        "doc_count" : number
+    } & AGG )[]
+}
+
 export type FiltersAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
@@ -156,7 +165,11 @@ export type FiltersAggRespAgg<AGG> = {
 export type TermsAggRespAgg<AGG> = {
     "doc_count_error_upper_bound" : number,
     "sum_other_doc_count" : number,
-} & AggBucketsResponseAgg<AGG>
+    "buckets" : ({
+        doc_count : number,
+        key : string | number
+    } & AGG)[]
+}
 
 
 export type MultiTermsAggRespAgg<AGG> = {
@@ -236,7 +249,8 @@ export type RangeResp = {
 export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQuery> = 
     AGS extends object ? 
     ( 
-        AT extends "diversified_" ? DiversifiedAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
+        AT extends "geo_distance" ? GeoDistanceAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
+        AT extends "diversified_sampler" ? DiversifiedAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "filters" ? FiltersAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "filter" ? FilterAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "terms" ? TermsAggRespAgg<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
@@ -247,7 +261,8 @@ export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQu
         never
         
     ) :
-    AT extends "diversified_" ? DiversifiedAggRespAgg<void> :
+    AT extends "geo_distance" ? GeoDistanceAggResp<void> :
+    AT extends "diversified_sampler" ? DiversifiedAggRespAgg<void> :
     AT extends "filters" ? FiltersAggRespAgg<void> :
     AT extends "filter" ? FilterAggRespAgg<void> :
     AT extends "terms" ? TermsAggRespAgg<void> :

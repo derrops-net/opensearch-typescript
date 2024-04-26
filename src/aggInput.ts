@@ -5,7 +5,8 @@ import * as agg from "./aggs"
  * All supported Agg keys
  */
 export type AggType = 
-    "diversified_" |
+    "geo_distance" |
+    "diversified_sampler" |
     "date_range" |
     "value_count" |
     "stats" |
@@ -41,7 +42,6 @@ export type AggType =
     "range" |
     "filter" |
     "filters" |
-    "diversified_" |
     "multi_terms"
 
 
@@ -52,6 +52,7 @@ export type AggType =
  * All supported JSON structure of Aggs
  */
 export type Agg<T> =
+    agg.GeoDistanceAgg<T> |
     agg.DiversifiedAgg<T> |
     agg.DateRangeBucketAgg<T> |
     agg.ValueCountAgg<T> |
@@ -95,7 +96,8 @@ export type Agg<T> =
  * Map to describe JSON of each agg type
  */
 type AggTypeDictionary<T, AT extends AggType> = 
-    AT extends "diversified_" ? agg.DiversifiedAgg<T> :
+    AT extends "geo_distance" ? agg.GeoDistanceAgg<T> :
+    AT extends "diversified_sampler" ? agg.DiversifiedAgg<T> :
     AT extends "date_range" ? agg.DateRangeBucketAgg<T> :
     AT extends "value_count" ? agg.ValueCountAgg<T> :
     AT extends "stats" ? agg.StatsAgg<T> :

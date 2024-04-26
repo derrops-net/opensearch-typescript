@@ -160,8 +160,23 @@ export type CardAgg<T> = {
     cardinality : fields.AnyField<T>
 }
 
+export type GeoDistanceAgg<T> = 
+{
+    geo_distance : {
+        field : string,
+        origin: {
+            lat : number,
+            lon : number,
+        },
+        ranges : {
+            from? : number,
+            to? : number,
+        }[]
+    }
+}
+
 export type DiversifiedAgg<T> = {
-    diversified_ : {
+    diversified_sampler : {
         shard_size: number,
         field : a.AnyAttribute<T>,
         max_docs_per_value? : number,

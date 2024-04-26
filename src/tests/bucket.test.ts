@@ -161,13 +161,13 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/diversified-sampler
   type QuickExample = Search<ServerLog, 
   {
     sample : {
-          agg : "diversified_",
-          aggs : {
-            terms : {
-              agg : "terms"
-            }
-          }
+      agg : "diversified_sampler",
+      aggs : {
+        terms : {
+          agg : "terms"
+        }
       }
+    }
   }>
 
   const search : QuickExample = 
@@ -175,9 +175,9 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/diversified-sampler
     "size": 0,
     "aggs": {
       "sample": {
-        "diversified_": {
+        "diversified_sampler": {
           "shard_size": 1000,
-          "field": "response"
+          "field": "response.keyword"
         },
         "aggs": {
           "terms": {
@@ -236,8 +236,8 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/filter/", async () 
 
   const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_ecommerce"})
 
-  console.log(result.aggregations.low_value.doc_count)
-  console.log(result.aggregations.low_value.avg_amount.value)
+  logger.info(result.aggregations.low_value.doc_count)
+  logger.info(result.aggregations.low_value.avg_amount.value)
 
 })
 
@@ -268,7 +268,7 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/filters/", async ()
           "filters": [
             {
               "term": {
-                "response" : 200
+                "response.keyword" : "200"
               }
             },
             {
@@ -291,8 +291,9 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/filters/", async ()
 
   const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_ecommerce"})
 
-  console.log(result.aggregations["200_os"].avg_amount)
-  console.log(result.aggregations["200_os"].doc_count)
+  logger.info(result.aggregations)
+  // console.log(result.aggregations["200_os"].avg_amount)
+  // console.log(result.aggregations["200_os"].doc_count)
 
 })
 
@@ -309,7 +310,6 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/multi-terms/", asyn
 
   const search : QuickExample = 
   {
-    "size": 0, 
     "aggs": {
       "hot": {
         "multi_terms": {
@@ -329,6 +329,74 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/multi-terms/", asyn
 
   const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_ecommerce"})
 
-  console.log(result.aggregations)
+  logger.info(result.aggregations)
+
+})
+
+
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/geo-distance/", async () => {
+
+  type QuickExample = Search<ServerLog, 
+  {
+    "position" : {
+      agg : "geo_distance",
+      aggs : {
+        max_bytes : {
+          agg : "max"
+        }
+      }
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "position": {
+        "aggs" : {
+          "max_bytes" : {
+            "max" : {
+              "field" : "bytes"
+            }
+          }
+        },
+        "geo_distance": {
+          "field": "geo.coordinates",
+          "origin": {
+            "lat": 83.76,
+            "lon": -81.2
+          },
+          "ranges": [
+            {
+              "to": 10
+            },
+            {
+              "from": 10,
+              "to": 20
+            },
+            {
+              "from": 20,
+              "to": 50
+            },
+            {
+              "from": 50,
+              "to": 100
+            },
+            {
+              "from": 100
+            }
+          ]
+        }
+      }
+    }
+  }
+  
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+  logger.info(result.aggregations)
+  logger.info(result.aggregations.position.buckets.map(b => b.max_bytes.value))
 
 })
