@@ -494,3 +494,43 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/geotile-grid/", asy
   logger.info(result.aggregations.grouped.buckets)
 
 })
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/ip-range/", async () => {
+
+type QuickExample = Search<ServerLog, 
+  {
+    "access" : {
+      agg : "ip_range"
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "size": 0,
+    "aggs": {
+      "access": {
+        "ip_range": {
+          "field": "ip",
+          "ranges": [
+            {
+              "from": "1.0.0.0",
+              "to": "126.158.155.183"
+            },
+            {
+              "mask": "1.0.0.0/8"
+            }
+          ]
+        }
+      }
+    }
+  }
+  
+  
+  
+  const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+  logger.info(result.aggregations)
+  logger.info(result.aggregations.access)
+
+})

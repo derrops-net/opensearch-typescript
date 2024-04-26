@@ -2,7 +2,21 @@ import * as fields from "./fields"
 import * as filter from "./filters"
 import * as a from "./attributes"
 
+import {RequireAtLeastOne} from "type-fest"
 
+export type IPRange<T> = {
+    ip_range : {
+        ranges : RequireAtLeastOne<{
+            from : string,
+            to : string,
+            mask : string,
+        }>[]
+    } & fields.SringField<T>
+}
+
+export type Global = {
+
+}
 
 export type GeotileGridAgg<T> = {
     geotile_grid : {
@@ -187,10 +201,10 @@ export type GeoDistanceAgg<T> =
             lat : number,
             lon : number,
         },
-        ranges : {
-            from? : number,
-            to? : number,
-        }[]
+        ranges : RequireAtLeastOne<{
+            from : number,
+            to : number,
+        }>[]
     }
 }
 

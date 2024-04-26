@@ -149,6 +149,15 @@ export type DiversifiedAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
 
+export type IPRangeAggResp<AGG> = {
+    buckets : 
+        ({
+            key : string,
+            from : string,
+            to : string,
+            doc_count : number,
+        } & AGG)[]
+}
 
 export type GeotileGridAggResp<AGG> = {
     "buckets" : ({
@@ -271,6 +280,7 @@ export type RangeResp = {
 export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQuery> = 
     AGS extends object ? 
     ( 
+        AT extends "ip_range" ? IPRangeAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> : 
         AT extends "geotile_grid" ? GeotileGridAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> : 
         AT extends "geohex_grid" ? GeohexGridAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
         AT extends "geohash_grid" ? GeohashGridAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> :
@@ -286,6 +296,7 @@ export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQu
         never
         
     ) :
+    AT extends "ip_range" ? IPRangeAggResp<void> :
     AT extends "geotile_grid" ? GeotileGridAggResp<void> :
     AT extends "geohex_grid" ? GeohexGridAggResp<void> :
     AT extends "geohash_grid" ? GeohashGridAggResp<void> :
