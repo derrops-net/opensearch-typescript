@@ -681,3 +681,44 @@ const result = await tsClient.searchTS({body : search, index : "opensearch_dashb
 logger.info(result.aggregations)
 
 })
+
+
+
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/sampler/", async () => {
+  
+type QuickExample = Search<ServerLog, 
+{
+  "significant_response_codes" : {
+    agg : "significant_terms"
+  }
+}>
+
+const search : QuickExample = 
+{
+  "size": 0,
+  "query": {
+    "terms": {
+      "machine.os.keyword": [
+        "ios"
+      ]
+    }
+  },
+  "aggs": {
+    "significant_response_codes": {
+      "significant_terms": {
+        "field": "agent.keyword"
+      }
+    }
+  }
+}
+
+
+
+const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+logger.info(result.aggregations.significant_response_codes.bg_count)
+logger.info(result.aggregations.significant_response_codes.doc_count)
+logger.info(result.aggregations.significant_response_codes.buckets)
+
+})

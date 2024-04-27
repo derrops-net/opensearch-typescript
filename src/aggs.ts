@@ -4,6 +4,10 @@ import * as a from "./attributes"
 
 import {RequireAtLeastOne} from "type-fest"
 
+export type SignificantTermsAgg<T> = {
+    significant_terms : fields.AnyField<T>
+}
+
 export type Sampler = {
     sampler : {
         shard_size : number
@@ -20,8 +24,6 @@ export type NestedAgg<T> = {
         path: string
     }
 }
-
-
 
 
 export type IPRangeAgg<T> = {

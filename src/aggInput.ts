@@ -5,6 +5,7 @@ import * as agg from "./aggs"
  * All supported Agg keys
  */
 export type AggType = 
+    "significant_terms" |
     "sampler" |
     "reverse_nested" |
     "nested" |
@@ -60,6 +61,7 @@ export type AggType =
  * All supported JSON structure of Aggs
  */
 export type Agg<T> =
+    agg.SignificantTermsAgg<T> |
     agg.Sampler |
     agg.ReverseNestedAgg |
     agg.NestedAgg<T> |
@@ -112,6 +114,7 @@ export type Agg<T> =
  * Map to describe JSON of each agg type
  */
 type AggTypeDictionary<T, AT extends AggType> = 
+    AT extends "significant_terms" ? agg.SignificantTermsAgg<T> :
     AT extends "sampler" ? agg.Sampler :
     AT extends "reverse_nested" ? agg.ReverseNestedAgg :
     AT extends "nested" ? agg.NestedAgg<T> :
