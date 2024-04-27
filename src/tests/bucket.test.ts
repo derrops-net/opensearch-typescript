@@ -685,7 +685,7 @@ logger.info(result.aggregations)
 
 
 
-test("https://opensearch.org/docs/latest/aggregations/bucket/sampler/", async () => {
+test("https://opensearch.org/docs/latest/aggregations/bucket/significant-terms/", async () => {
   
 type QuickExample = Search<ServerLog, 
 {
@@ -720,5 +720,53 @@ const result = await tsClient.searchTS({body : search, index : "opensearch_dashb
 logger.info(result.aggregations.significant_response_codes.bg_count)
 logger.info(result.aggregations.significant_response_codes.doc_count)
 logger.info(result.aggregations.significant_response_codes.buckets)
+
+})
+
+test("https://opensearch.org/docs/latest/aggregations/bucket/significant-text/", async () => {
+  
+  type QuickExample = Search<ServerLog, 
+  {
+    my_sample : {
+      agg : "sampler",
+      aggs : {
+        keywords : {
+          agg : "significant_text"
+        }
+      }
+    }
+  }>
+
+  const search : QuickExample = 
+  {
+    "aggs" : {
+      "my_sample" : {
+        "sampler" : {
+          "shard_size" : 100
+        },
+        "aggs" : {
+          "keywords" : {
+            "significant_text": {
+              "field": "agent",
+              "background_filter": {
+                "term": {
+                  "machine.os" : "linux"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+
+const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
+
+logger.info(result.aggregations.my_sample)
+// logger.info(result.aggregations.significant_response_codes.doc_count)
+// logger.info(result.aggregations.significant_response_codes.buckets)
 
 })

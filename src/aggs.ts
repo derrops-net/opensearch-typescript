@@ -4,13 +4,25 @@ import * as a from "./attributes"
 
 import {RequireAtLeastOne} from "type-fest"
 
+
+export type SignificantTextAgg<T> = {
+    significant_text : {
+        min_doc_count? : number,
+        background_filter? : {
+            term : Partial<{
+                [key in a.StringAtt<T>] : string
+            }>
+        }
+    } & fields.SringField<T>
+}
+
 export type SignificantTermsAgg<T> = {
-    significant_terms : fields.AnyField<T>
+    significant_terms : fields.AnyField<T>,
 }
 
 export type Sampler = {
     sampler : {
-        shard_size : number
+        shard_size : number,
     }
 }
 

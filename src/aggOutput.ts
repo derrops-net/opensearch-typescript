@@ -150,6 +150,17 @@ export type DiversifiedAggRespAgg<AGG> = {
     doc_count : number
 } & AGG
 
+export type SignificantTextAggResp<AGG> = {
+    doc_count : number,
+    bg_count : number,
+    buckets : ({
+        key : string,
+        doc_count : number,
+        score : number,
+        bg_count : number
+    } & AGG)[]
+}
+
 export type SignificantTermsAggResp<AGG> = {
     doc_count : number,
     bg_count : number,
@@ -292,6 +303,7 @@ export type RangeResp = {
 export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQuery> = 
     AGS extends object ? 
     ( 
+        AT extends "significant_text" ? SignificantTextAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> : 
         AT extends "significant_terms" ? SignificantTermsAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> : 
         AT extends "ip_range" ? IPRangeAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> : 
         AT extends "geotile_grid" ? GeotileGridAggResp<{[K in keyof AGS] : AggTypeResponseDictionary2<T,AGS[K]["agg"],AGS[K]["aggs"]>}> : 
@@ -309,6 +321,7 @@ export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQu
         never
         
     ) :
+    AT extends "significant_text" ? SignificantTextAggResp<void> :
     AT extends "significant_terms" ? SignificantTermsAggResp<void> :
     AT extends "ip_range" ? IPRangeAggResp<void> :
     AT extends "geotile_grid" ? GeotileGridAggResp<void> :
