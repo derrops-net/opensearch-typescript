@@ -2,14 +2,14 @@ import * as fields from "./fields"
 import * as filter from "./filters"
 import * as a from "./attributes"
 
-import {RequireAtLeastOne} from "type-fest"
+import {RequireAtLeastOne, RequireExactlyOne} from "type-fest"
 
 
 export type SignificantTextAgg<T> = {
     significant_text : {
         min_doc_count? : number,
         background_filter? : {
-            term : Partial<{
+            term : RequireExactlyOne<{
                 [key in a.StringAtt<T>] : string
             }>
         }
@@ -182,7 +182,7 @@ export type TermsAgg<T> = {
 export type MultiTermsAgg<T> = {
     multi_terms : {
         terms : fields.AnyField<T>[]
-        order? : Partial<{
+        order? : RequireExactlyOne<{
             [key in a.AnyAttribute<T>] : "asc" | "desc"
         }>
         size? : number,
@@ -264,7 +264,7 @@ export type AdjacencyMatrixBucketAgg<T> = {
     adjacency_matrix : {
         filters : {
             [k : string] : {
-                match : Partial<{
+                match : RequireExactlyOne<{
                         [k in a.TextOrKeywordAtt<T>] : string
                 }>
             }

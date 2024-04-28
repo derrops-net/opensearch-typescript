@@ -1,6 +1,8 @@
+import { RequireAtLeastOne, RequireExactlyOne } from "type-fest"
 import { AggTypeDictionaryRecursive, AggsQuery } from "./aggInput"
 import { AggTypeResponseDictionary2 } from "./aggOutput"
 import * as att from "./attributes"
+import { Field, NumberField } from "./fields"
 import * as f from "./filters"
 import * as m from "./match"
 
@@ -43,11 +45,79 @@ export type BooleanStatement<T> = {
     minimum_should_match? : number,
 }
 
+export type Boosting<T> = {
+    positive : {
+        match : m.Match<T>
+    },
+    negative : {
+        match : m.Match<T>
+    },
+    negative_boost : number,
+}
+
+
+export type ConstanScore<T> =  {
+    filter: f.FilterStatement<T>,
+    boost: number,
+}
+
+export type DisjointMatrix<T> = {
+    queries : m.Match<T>[],
+}
+
+
+export type FunctionScore<T> = {
+    weight : number,
+    query : m.Match<T>,
+    
+} & RequireAtLeastOne<{
+    random_score : {
+        seed : number,
+    } & NumberField<T>,
+    
+    field_value_factor : {
+        factor : number,
+        modifier : "log" | "log1p" | "log2p" | "ln" | "ln1p" | "ln2p" | "reciprocal" | "square" | "sqrt" | "none",
+        missing? : number,
+    } & NumberField<T>,
+
+    script_score : {
+        script : string | {
+            params: {
+                [k : string] : number
+            },
+            source: string
+        },
+    }
+
+    exp : {
+        [a in att.AnyAttribute<T>]: { 
+          origin?: string,
+          offset?: string,
+          scale?:  string,
+          decay?: number
+        }
+      }
+
+    }>
+
+export type IDs = {
+    ids : {
+        values : string[]
+    }
+}
+
+
 /**
  * Query to select a sub-set of documents
  */
 export type OSQuery<T> = {
+    function_score? : FunctionScore<T>,
+    dis_max? : DisjointMatrix<T>,
+    constant_score? : ConstanScore<T>,
+    boosting? : Boosting<T>,
     match_all? : {},
+
     bool? : BooleanStatement<T>,
     nested? : {
         path : string,
@@ -111,7 +181,7 @@ export type Search<T, A extends AggsQuery> = {
     stored_fields? : att.AnyAttribute<T>[],
     /** How to sort */
     sort? : 
-        Partial<{
+        RequireExactlyOne<{
             [key in att.AnyAttribute<T>] : {
                 order? : "desc" | "asc",
                 missing?: "_first" | "_last",

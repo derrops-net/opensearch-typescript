@@ -1,6 +1,8 @@
 import { BooleanAtt } from "."
 import { NumberAtt, DateAtt, KeyWord, StringAtt, AnyAttribute, TextOrKeywordAtt } from "./attributes"
+import * as att from "./attributes"
 import { BooleanStatement } from "./search"
+import type {RequireExactlyOne} from 'type-fest';
 
 
 type RangeDefaults<A> = {
@@ -10,9 +12,7 @@ type RangeDefaults<A> = {
     lt? : A,
 }
 
-type Range<T, B extends string, R extends RangeDefaults<T>> = {
-    [key in B] : R
-}
+type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExactlyOne<{ [key in B] : R}>
 
 type NumberRange<T> = Range<number, NumberAtt<T>, RangeDefaults<number>>
 
@@ -24,7 +24,7 @@ type DateRange<T> = Range<Date, DateAtt<T>, RangeDefaults<Date> & {
 
 
 type RangeStatement<T> = {
-    "range" : Partial<NumberRange<T> | DateRange<T>>
+    "range" : NumberRange<T> | DateRange<T>
 }
 
 type ExistsStatement<T> = {
@@ -34,7 +34,7 @@ type ExistsStatement<T> = {
 }
 
 type PrefixStatement<T> = {
-    "prefix" : Partial<{
+    "prefix" : RequireExactlyOne<{
         [key in TextOrKeywordAtt<T>] : {
             value : string,
             boost? : number,
@@ -43,7 +43,7 @@ type PrefixStatement<T> = {
 }
 
 type WildCardStatement<T> = {
-    "wildcard" : Partial<{
+    "wildcard" : RequireExactlyOne<{
         [key in TextOrKeywordAtt<T>] : {
             value : string,
             boost? : number,
@@ -52,7 +52,7 @@ type WildCardStatement<T> = {
 }
 
 type RegexpStatement<T> = {
-    "regexp" : Partial<{
+    "regexp" : RequireExactlyOne<{
         [key in TextOrKeywordAtt<T>] : {
             value : string,
             flags? : number,
@@ -61,7 +61,49 @@ type RegexpStatement<T> = {
     }>
 }
 
-export type Term<A extends string, V> = {"term" : Partial<{[key in A] : V}>}
+type GeoBoundingBox<T> = {
+    geo_bounding_box : {
+        point : {
+            top_left: {
+              lat: number,
+              lon: number,
+            },
+            bottom_right: {
+              lat: number,
+              lon: number,
+            }
+        }
+    }
+}
+
+type XYShape<T> = {
+    xy_shape: {
+        geometry: {
+            shape: {
+                type: "envelope",
+                coordinates: [number,number][]
+            },
+            relation: "INTERSECTS" | "DISJOINT" | "WITHIN" | "CONTAINS"
+        }
+    }
+}
+
+
+export type FuzzyStatement<T> = {
+    fuzzy : 
+        RequireExactlyOne<{[a in att.StringAtt<T>] : {
+            value : string,
+            boost? : number,
+            fuzziness? : number,
+            max_expansions? : number,
+            prefix_length? : number,
+            rewrite? : string,
+            transpositions : boolean,
+        }
+    }>
+}
+
+export type Term<A extends string, V> = {"term" : RequireExactlyOne<{[key in A] : V}>}
 export type TermKeyword<T> = Term<KeyWord<T>, string>
 export type TermString<T> =  Term<StringAtt<T>, string>
 export type TermNumber<T> =  Term<NumberAtt<T>, number>
@@ -75,7 +117,7 @@ export type TermStatement<T> =
     TermNumber<T> |
     TermBoolean<T>
 
-export type Terms<A extends string, V> = {"terms" : Partial<{[key in A] : V[]}>}
+export type Terms<A extends string, V> = {"terms" : RequireExactlyOne<{[key in A] : V[]}>}
 
 export type TermsKeyword<T> = Terms<KeyWord<T>, string>
 export type TermsString<T> =  Terms<StringAtt<T>, string>
@@ -99,7 +141,10 @@ export type FilterStatement<T> =
     TermStatement<T> | 
     TermsStatement<T> |
     BoolStatement<T> |
-    AndStatement<T>
+    AndStatement<T> |
+    GeoBoundingBox<T> |
+    XYShape<T> |
+    FuzzyStatement<T>
 
 export type BoolStatement<T> = {
     bool : BooleanStatement<T>
