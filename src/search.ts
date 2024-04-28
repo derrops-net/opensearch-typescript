@@ -107,37 +107,43 @@ export type IDs = {
     }
 }
 
+export type Nested<T> = {
+    path : string,
+    query : OSQuery<T>,
+    ignore_unmapped? : boolean,
+    score_mode? : string,
+    boost? : number,
+    inner_hits? : {
+        ignore_unmapped? : boolean,
+        from? : number,
+        size? : number,
+        version? : boolean,
+        seq_no_primary_term? : false,
+        explain? : false,
+        track_scores? : false,
+        _source? : Source<T>
+    }
+}
+
 
 /**
  * Query to select a sub-set of documents
  */
 export type OSQuery<T> = {
     function_score? : FunctionScore<T>,
-    dis_max? : DisjointMatrix<T>,
     constant_score? : ConstanScore<T>,
     boosting? : Boosting<T>,
     match_all? : {},
 
     bool? : BooleanStatement<T>,
-    nested? : {
-        path : string,
-        query : OSQuery<T>,
-        ignore_unmapped? : boolean,
-        score_mode? : string,
-        boost? : number,
-        inner_hits? : {
-            ignore_unmapped? : boolean,
-            from? : number,
-            size? : number,
-            version? : boolean,
-            seq_no_primary_term? : false,
-            explain? : false,
-            track_scores? : false,
-            _source? : Source<T>
-        }
-    }
+    nested? : Nested<T> 
+
+
+    // TODO - figure out which queries are valid in match or filter contexts
+    dis_max? : DisjointMatrix<T>,
     match_phrase? : m.MatchPhrase<T>,
     match? : m.Match<T>,
+
 
 } & Partial<f.FilterStatement<T>>
 
