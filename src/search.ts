@@ -81,11 +81,21 @@ export type Search<T, A extends AggsQuery> = {
     aggs? : {[K in keyof A] : AggTypeDictionaryRecursive<T,A[K]["agg"],A[K]["aggs"]>},
 
 
+    docvalue_fields? : att.AnyAttribute<T>[],
+
+
     /** Query used for search */ 
     query? : OSQuery<T>,
 
     /** Subset of attributes used for search */ 
-    _source? : Source<T>,
+    _source? : Source<T> | boolean,
+
+    indices_boost? : { [a:string] : number }[]
+
+    min_score? : number,
+    seq_no_primary_term? : boolean,
+    terminate_after? : number,
+
 
     /** Number of documents to return in search */ 
     size? : number,
