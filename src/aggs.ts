@@ -247,7 +247,7 @@ export type GeoDistanceAgg<T> =
 export type DiversifiedAgg<T> = {
     diversified_sampler : {
         shard_size: number,
-        field : a.AnyAttribute<T>,
+        field? : a.AnyAttribute<T>,
         max_docs_per_value? : number,
     }
 }

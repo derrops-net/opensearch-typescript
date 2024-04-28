@@ -678,7 +678,7 @@ const search : QuickExample =
 
 const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
 
-logger.info(result.aggregations)
+logger.info(result.aggregations.sample.terms.buckets)
 
 })
 
@@ -739,20 +739,21 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/significant-text/",
 
   const search : QuickExample = 
   {
-    "aggs" : {
-      "my_sample" : {
-        "sampler" : {
-          "shard_size" : 100
+    "query": {
+      "match": {
+        "agent" : "Firefox",
+      }
+    },
+    "aggs": {
+      "my_sample": {
+        "sampler": {
+          "shard_size": 100
         },
-        "aggs" : {
-          "keywords" : {
+        "aggs": {
+          "keywords": {
             "significant_text": {
               "field": "agent",
-              "background_filter": {
-                "term": {
-                  "machine.os" : "linux"
-                }
-              }
+              "min_doc_count": 4
             }
           }
         }
@@ -765,8 +766,12 @@ test("https://opensearch.org/docs/latest/aggregations/bucket/significant-text/",
 
 const result = await tsClient.searchTS({body : search, index : "opensearch_dashboards_sample_data_logs"})
 
-logger.info(result.aggregations.my_sample)
-// logger.info(result.aggregations.significant_response_codes.doc_count)
-// logger.info(result.aggregations.significant_response_codes.buckets)
-
+logger.info(result.aggregations.my_sample.keywords.bg_count)
+logger.info(result.aggregations.my_sample.keywords.doc_count)
+logger.info(result.aggregations.my_sample.keywords.buckets.map(b => ({
+  bg_count : b.bg_count,
+  doc_count : b.doc_count,
+  key : b.key,
+  score : b.score,
+})))
 })
