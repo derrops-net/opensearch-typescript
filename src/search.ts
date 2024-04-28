@@ -13,7 +13,8 @@ export type Document<T> = {
     _index : string,
     _id : string,
     _score : number,
-    _source : T
+    _source : T,
+    sort? : any[],
 }
 
 
@@ -120,6 +121,7 @@ export type Search<T, A extends AggsQuery> = {
             }
         }>[],
 
+    search_after? : any[],
     
     /** Response which will be populated after searching */
     response? : SearchResponse<T,A>
