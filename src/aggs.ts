@@ -88,8 +88,9 @@ export type ScriptedMetricAgg = {
 }
 
 export type PercentilesAgg<T> = {
-    percentiles : fields.AnyField<T>,
-    percents : number[],
+    percentiles : fields.AnyField<T> & {
+        percents : number[],
+    }
 }
 
 export type PercentileRanksAgg<T> = {
