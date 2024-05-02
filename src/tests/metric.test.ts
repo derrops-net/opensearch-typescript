@@ -307,7 +307,10 @@ test("https://opensearch.org/docs/latest/aggregations/metric/percentile/", async
         "aggs": {
           "percentile_taxful_total_price": {
             "percentiles": {
-              "field": "taxful_total_price"
+              "field": "taxful_total_price",
+              "percents" : [
+                50
+              ]
             }
           }
         }
