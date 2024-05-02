@@ -492,7 +492,9 @@ test("https://opensearch.org/docs/latest/aggregations/pipeline-agg/#moving_avg",
             "sum": { "field": "bytes" }                 
           },
           "moving_avg_of_sum_of_bytes": {
-            "moving_avg": { "buckets_path": "sum_of_bytes" }
+            "moving_avg": { 
+              "buckets_path": "sum_of_bytes"
+            }
           }
         }
       }

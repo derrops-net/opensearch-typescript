@@ -113,7 +113,19 @@ export type BucketSerialDiffAgg = {
 }
 
 export type BucketMovingAvgAgg = {
-    moving_avg : BucketPipePatch
+    moving_avg : {
+        buckets_path : string,
+        predict? : number,
+        window? : number,
+        model? : "ewma" | "holt" | "holt_winters" | "linear" | "simple",
+        settings? : {
+            type? : "add" | "mult",
+            alpha? : number,
+            beta? : number,
+            gamma? : number,
+            period? : number,
+        }
+    }
 }
 
 export type BucketDerivativeAgg = {
