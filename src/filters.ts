@@ -16,7 +16,7 @@ type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExactlyOne<
 
 type NumberRange<T> = Range<number, NumberAtt<T>, RangeDefaults<number>>
 
-type DateRange<T> = Range<Date, DateAtt<T>, RangeDefaults<Date> & {
+type DateRange<T> = Range<string, DateAtt<T>, RangeDefaults<string> & {
     time_zone?: string,
     format?: string,
     execution?: string,
