@@ -1,0 +1,35 @@
+{
+    "FlightNum": "GFG6BEH",
+    "DestCountry": "IT",
+    "OriginWeather": "Clear",
+    "OriginCityName": "Paris",
+    "AvgTicketPrice": 251.86677945199756,
+    "DistanceMiles": 525.01292723685,
+    "FlightDelay": true,
+    "DestWeather": "Sunny",
+    "Dest": "Pisa International Airport",
+    "FlightDelayType": "Late Aircraft Delay",
+    "OriginCountry": "FR",
+    "dayOfWeek": 0,
+    "DistanceKilometers": 844.9264043710613,
+    "timestamp": "2024-04-29T07:21:49",
+    "DestLocation": {
+        "lat": "43.683899",
+        "lon": "10.3927"
+    },
+    "DestAirportID": "PI05",
+    "Carrier": "Logstash Airways",
+    "Cancelled": false,
+    "FlightTimeMin": 241.9403557983923,
+    "Origin": "Charles de Gaulle International Airport",
+    "OriginLocation": {
+        "lat": "49.01279831",
+        "lon": "2.549999952"
+    },
+    "DestRegion": "IT-52",
+    "OriginAirportID": "CDG",
+    "OriginRegion": "FR-J",
+    "DestCityName": "Pisa",
+    "FlightTimeHour": 4.032339263306538,
+    "FlightDelayMin": 195
+}
