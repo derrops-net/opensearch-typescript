@@ -332,10 +332,10 @@ export type AggTypeResponseDictionary2<T, AT extends AggType, AGS extends AggsQu
     AT extends "geohex_grid" ? GeohexGridAggResp<void> :
     AT extends "geohash_grid" ? GeohashGridAggResp<void> :
     AT extends "geo_distance" ? GeoDistanceAggResp<void> :
-    // AT extends "sampler" ? SamplerAggRespAgg<void> :
-    // AT extends "diversified_sampler" ? DiversifiedAggRespAgg<void> :
-    // AT extends "filters" ? FiltersAggRespAgg<void> :
-    // AT extends "filter" ? FilterAggRespAgg<void> :
+    AT extends "sampler" ? SamplerAggRespAgg<void> :
+    AT extends "diversified_sampler" ? DiversifiedAggRespAgg<void> :
+    AT extends "filters" ? FiltersAggRespAgg<void> :
+    AT extends "filter" ? FilterAggRespAgg<void> :
     AT extends "terms" ? TermsAggRespAgg<void> :
     AT extends "multi_terms" ? MultiTermsAggRespAgg<void> :
     AT extends "histogram" ? DateHistAggRespAgg<void> :
