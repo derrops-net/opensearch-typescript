@@ -10,8 +10,8 @@ import { makeClientWithEndpoint } from "./testUtil"
 
 const INDEX_LOGS = "opensearch_dashboards_sample_data_logs"
 
-var esClient : os.Client
-var tsClient : TypescriptOSProxyClient
+var esClient: os.Client
+var tsClient: TypescriptOSProxyClient
 
 beforeAll(async () => {
     esClient = await makeClientWithEndpoint()
@@ -19,129 +19,151 @@ beforeAll(async () => {
 })
 
 
+type CountAllQuery = q.Search<ServerLog, {
+    total: {
+        agg: "value_count"
+    }
+}>
 
+const countAll: CountAllQuery = {
+    "query": {
+        "match_all": {
 
-const searchMatchAll : q.Search<ServerLog, {}> = {
-    query : {
-        "match_all" : {
+        }
+    },
+    "aggs": {
+        "total": {
+            "value_count": {
+                "field": "_id"
+            }
+        }
+    },
+    "size": 0
+}
+
+const searchMatchAll: q.Search<ServerLog, {}> = {
+    query: {
+        "match_all": {
 
         }
     }
 }
 
-const searchExample : q.Search<ServerLog, {
-    exampleDateHist : {
-        agg : "date_histogram",
-        aggs : {
-            "agentTerms" : {
-                agg : "terms",
+
+const searchExample: q.Search<ServerLog, {
+    exampleDateHist: {
+        agg: "date_histogram",
+        aggs: {
+            "agentTerms": {
+                agg: "terms",
 
             }
         }
     },
-    adjacency : {
-        agg : "adjacency_matrix"
+    adjacency: {
+        agg: "adjacency_matrix"
     },
-    test : {
-        agg : "terms",
-        aggs : {
-            "innerTest" : {
-                agg : "extended_stats"
+    test: {
+        agg: "terms",
+        aggs: {
+            "innerTest": {
+                agg: "extended_stats"
             },
-            "somethingMore" : {
-                agg : "terms",
-                aggs : {
-                    "topHits" : {
-                        agg : "top_hits"
+            "somethingMore": {
+                agg: "terms",
+                aggs: {
+                    "topHits": {
+                        agg: "top_hits"
                     }
                 }
             }
         }
     }
 }> = {
-    index : INDEX_LOGS,
-    _source : {
-        includes : [
+    index: INDEX_LOGS,
+    _source: {
+        includes: [
             "bytes",
             "utc_time"
         ]
     },
-    query : {
-        bool : {
-            must : [
+    query: {
+        bool: {
+            must: [
                 {
                     "terms":
                     {
                         "agent.keyword": [
                             "Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1",
                             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)",
-                    ]}
+                        ]
+                    }
                 }
             ],
             "minimum_should_match": 2,
             "should": [
-              {
-                "term": {
-                  "tags.keyword": "login"
+                {
+                    "term": {
+                        "tags.keyword": "login"
+                    }
+                },
+                {
+                    "term": {
+                        "tags.keyword": "success"
+                    }
                 }
-              },
-              {
-                "term": {
-                  "tags.keyword": "success"
-                }
-              }
             ]
         }
     },
-    aggs : {
-        "exampleDateHist" : {
-            "date_histogram" : {
+    aggs: {
+        "exampleDateHist": {
+            "date_histogram": {
                 "interval": "3d",
-                "field" : "timestamp"
+                "field": "timestamp"
             },
-            "aggs" : {
-                "agentTerms" : {
-                    "terms" : {
-                        "field" : "agent.keyword",
+            "aggs": {
+                "agentTerms": {
+                    "terms": {
+                        "field": "agent.keyword",
                     }
                 }
             }
         },
-        "adjacency" : {
-            "adjacency_matrix" : {
-                "filters" : {
-                    "linux" : {
-                        "match" : {
-                            "agent.keyword" : "Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1",
+        "adjacency": {
+            "adjacency_matrix": {
+                "filters": {
+                    "linux": {
+                        "match": {
+                            "agent.keyword": "Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1",
                         }
                     },
-                    "windows" : {
-                        "match" : {
-                            "agent.keyword" : "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)",
+                    "windows": {
+                        "match": {
+                            "agent.keyword": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)",
                         }
                     }
                 }
             }
-            
+
         },
-        "test" : {
-            "terms" : {
-                "field" : "agent.keyword"
+        "test": {
+            "terms": {
+                "field": "agent.keyword"
             },
-            "aggs" : {
-                "innerTest" : {
-                    "extended_stats" : {
-                        "field" : "bytes"
+            "aggs": {
+                "innerTest": {
+                    "extended_stats": {
+                        "field": "bytes"
                     }
                 },
-                "somethingMore" : {
-                    "terms" : {
-                        "field" : "referer.keyword"
+                "somethingMore": {
+                    "terms": {
+                        "field": "referer.keyword"
                     },
-                    "aggs" : {
-                        "topHits" : {
-                            "top_hits" : {
-                                "size" : 3
+                    "aggs": {
+                        "topHits": {
+                            "top_hits": {
+                                "size": 3
                             }
                         }
                     }
@@ -149,7 +171,7 @@ const searchExample : q.Search<ServerLog, {
             }
         }
     },
-    "size" : 10
+    "size": 10
 }
 export const queries = [
     {},
@@ -157,6 +179,24 @@ export const queries = [
     {},
     searchMatchAll,
 ];
+
+
+test("normal count", async () => {
+    const response = await tsClient.countTs({ body: {}, index: INDEX_LOGS })
+    response.count
+    response._shards.total
+    response._shards.failed
+    response._shards.skipped
+    response._shards.successful
+    console.log(JSON.stringify(response, null, 2))
+})
+
+
+test("agg count all documents", async () => {
+    const response = await tsClient.searchTS({ body: countAll, index: INDEX_LOGS })
+    console.log(response.aggregations.total.value)
+    console.log(JSON.stringify(response, null, 2))
+})
 
 
 test("msearchTS", async () => {
@@ -174,7 +214,7 @@ test("msearchTS", async () => {
 
 const msearch = {
     "searchExample": searchExample,
-    "searchMatchAll" : searchMatchAll
+    "searchMatchAll": searchMatchAll
 }
 
 
@@ -191,14 +231,14 @@ test("testRawTypes", async () => {
 
 
 test("searchTS", async () => {
-    await tsClient.searchTS({body : searchExample, index : INDEX_LOGS})
+    await tsClient.searchTS({ body: searchExample, index: INDEX_LOGS })
     console.log(
         searchExample.response.aggregations.exampleDateHist.buckets.flatMap(
             b => b.agentTerms.buckets
                 .flatMap(t => ({
-                    "t.key" : t.key,
-                    "t.doc_count" : t.doc_count,
-                    "b.key_as_string" : b.key_as_string,
+                    "t.key": t.key,
+                    "t.doc_count": t.doc_count,
+                    "b.key_as_string": b.key_as_string,
                     // "b.key_as_string" : b.key_as_string,
                 }))))
 
