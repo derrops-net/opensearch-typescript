@@ -2,75 +2,80 @@ import { BooleanAtt } from "."
 import { NumberAtt, DateAtt, KeyWord, StringAtt, AnyAttribute, TextOrKeywordAtt } from "./attributes"
 import * as att from "./attributes"
 import { BooleanStatement } from "./search"
-import type {RequireExactlyOne} from 'type-fest';
+import type { RequireExactlyOne } from 'type-fest';
 
 
 type RangeDefaults<A> = {
-    gte? : A,
-    lte? : A,
-    gt? : A,
-    lt? : A,
+    gte?: A,
+    lte?: A,
+    gt?: A,
+    lt?: A,
 }
 
-type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExactlyOne<{ [key in B] : R}>
+type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExactlyOne<{ [key in B]: R }>
 
 type NumberRange<T> = Range<number, NumberAtt<T>, RangeDefaults<number>>
 
-type DateRange<T> = Range<string, DateAtt<T>, RangeDefaults<string> & {
-    time_zone?: string,
-    format?: string,
-    execution?: string,
+type DateRange<T> = RequireExactlyOne<{
+    [key in DateAtt<T>]: {
+        gte?: Date | string,
+        lte?: Date | string,
+        gt?: Date | string,
+        lt?: Date | string,
+        time_zone?: string,
+        format?: string,
+        execution?: string,
+    }
 }>
 
-
 type RangeStatement<T> = {
-    "range" : NumberRange<T> | DateRange<T>
+    "range": NumberRange<T> | DateRange<T>
 }
 
 type ExistsStatement<T> = {
-    "exists" : {
-        "field" : AnyAttribute<T>
+    "exists": {
+        "field": AnyAttribute<T>
     }
 }
 
 type PrefixStatement<T> = {
-    "prefix" : RequireExactlyOne<{
-        [key in TextOrKeywordAtt<T>] : {
-            value : string,
-            boost? : number,
+    "prefix": RequireExactlyOne<{
+        [key in TextOrKeywordAtt<T>]: {
+            value: string,
+            boost?: number,
         }
     }>
 }
 
 type WildCardStatement<T> = {
-    "wildcard" : RequireExactlyOne<{
-        [key in TextOrKeywordAtt<T>] : {
-            value : string,
-            boost? : number,
+    "wildcard": RequireExactlyOne<{
+        [key in TextOrKeywordAtt<T>]: {
+            value: string,
+            boost?: number,
         }
     }>
 }
 
 type RegexpStatement<T> = {
-    "regexp" : RequireExactlyOne<{
-        [key in TextOrKeywordAtt<T>] : {
-            value : string,
-            flags? : number,
-            max_determinized_states? : number
+    "regexp": RequireExactlyOne<{
+        [key in TextOrKeywordAtt<T>]: {
+            value: string,
+            flags?: number,
+            max_determinized_states?: number
         }
     }>
 }
 
 type GeoBoundingBox<T> = {
-    geo_bounding_box : {
-        point : {
+    geo_bounding_box: {
+        point: {
             top_left: {
-              lat: number,
-              lon: number,
+                lat: number,
+                lon: number,
             },
             bottom_right: {
-              lat: number,
-              lon: number,
+                lat: number,
+                lon: number,
             }
         }
     }
@@ -81,7 +86,7 @@ type XYShape<T> = {
         geometry: {
             shape: {
                 type: "envelope",
-                coordinates: [number,number][]
+                coordinates: [number, number][]
             },
             relation: "INTERSECTS" | "DISJOINT" | "WITHIN" | "CONTAINS"
         }
@@ -90,55 +95,55 @@ type XYShape<T> = {
 
 
 export type FuzzyStatement<T> = {
-    fuzzy : 
-        RequireExactlyOne<{[a in att.StringAtt<T>] : {
-            value : string,
-            boost? : number,
-            fuzziness? : number,
-            max_expansions? : number,
-            prefix_length? : number,
-            rewrite? : string,
-            transpositions : boolean,
-        }
+    fuzzy:
+    RequireExactlyOne<{ [a in att.StringAtt<T>]: {
+        value: string,
+        boost?: number,
+        fuzziness?: number,
+        max_expansions?: number,
+        prefix_length?: number,
+        rewrite?: string,
+        transpositions: boolean,
+    }
     }>
 }
 
-export type Term<A extends string, V> = {"term" : RequireExactlyOne<{[key in A] : V}>}
+export type Term<A extends string, V> = { "term": RequireExactlyOne<{ [key in A]: V }> }
 export type TermKeyword<T> = Term<KeyWord<T>, string>
-export type TermString<T> =  Term<StringAtt<T>, string>
-export type TermNumber<T> =  Term<NumberAtt<T>, number>
-export type TermBoolean<T> =  Term<BooleanAtt<T>, boolean>
-export type TermDate<T> =    Term<DateAtt<T>, Date>
+export type TermString<T> = Term<StringAtt<T>, string>
+export type TermNumber<T> = Term<NumberAtt<T>, number>
+export type TermBoolean<T> = Term<BooleanAtt<T>, boolean>
+export type TermDate<T> = Term<DateAtt<T>, Date>
 
-export type TermStatement<T> = 
-    TermKeyword<T> | 
-    TermString<T> | 
-    TermDate<T> | 
+export type TermStatement<T> =
+    TermKeyword<T> |
+    TermString<T> |
+    TermDate<T> |
     TermNumber<T> |
     TermBoolean<T>
 
-export type Terms<A extends string, V> = {"terms" : RequireExactlyOne<{[key in A] : V[]}>}
+export type Terms<A extends string, V> = { "terms": RequireExactlyOne<{ [key in A]: V[] }> }
 
 export type TermsKeyword<T> = Terms<KeyWord<T>, string>
-export type TermsString<T> =  Terms<StringAtt<T>, string>
-export type TermsNumber<T> =  Terms<NumberAtt<T>, number>
-export type TermsDate<T> =  Terms<DateAtt<T>, Date>
-export type TermsBoolean<T> =  Terms<BooleanAtt<T>, boolean>
+export type TermsString<T> = Terms<StringAtt<T>, string>
+export type TermsNumber<T> = Terms<NumberAtt<T>, number>
+export type TermsDate<T> = Terms<DateAtt<T>, Date>
+export type TermsBoolean<T> = Terms<BooleanAtt<T>, boolean>
 
-export type TermsStatement<T> = 
-    TermsKeyword<T> | 
-    TermsString<T> | 
-    TermsNumber<T> | 
+export type TermsStatement<T> =
+    TermsKeyword<T> |
+    TermsString<T> |
+    TermsNumber<T> |
     TermsDate<T> |
     TermsBoolean<T>
 
-export type FilterStatement<T> = 
-    WildCardStatement<T> | 
-    RegexpStatement<T> | 
-    PrefixStatement<T> | 
-    ExistsStatement<T> |  
-    RangeStatement<T> | 
-    TermStatement<T> | 
+export type FilterStatement<T> =
+    WildCardStatement<T> |
+    RegexpStatement<T> |
+    PrefixStatement<T> |
+    ExistsStatement<T> |
+    RangeStatement<T> |
+    TermStatement<T> |
     TermsStatement<T> |
     BoolStatement<T> |
     AndStatement<T> |
@@ -147,11 +152,11 @@ export type FilterStatement<T> =
     FuzzyStatement<T>
 
 export type BoolStatement<T> = {
-    bool : BooleanStatement<T>
+    bool: BooleanStatement<T>
 }
 
 export type AndStatement<T> = {
-    and : {
-        filters : FilterStatement<T>
+    and: {
+        filters: FilterStatement<T>
     }
 }

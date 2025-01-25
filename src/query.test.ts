@@ -98,6 +98,14 @@ const searchExample: q.Search<ServerLog, {
                             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)",
                         ]
                     }
+                },
+                {
+                    "range": {
+                        "@timestamp": {
+                            "lte": "2025-01-25T03:41:11.215Z",
+                            "gte": new Date("2005-01-25T03:41:11.215Z")
+                        }
+                    }
                 }
             ],
             "minimum_should_match": 2,
