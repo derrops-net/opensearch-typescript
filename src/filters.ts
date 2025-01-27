@@ -15,19 +15,21 @@ export type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExac
 
 export type NumberRange<T> = Range<number, NumberAtt<T>, RangeDefaults<number>>
 
+export type DateRangeStatement = {
+    gte?: Date | string,
+    lte?: Date | string,
+    gt?: Date | string,
+    lt?: Date | string,
+    time_zone?: string,
+    format?: string,
+    execution?: string,
+}
+
 export type DateRange<T> = RequireExactlyOne<{
-    [key in DateAtt<T>]: {
-        gte?: Date | string,
-        lte?: Date | string,
-        gt?: Date | string,
-        lt?: Date | string,
-        time_zone?: string,
-        format?: string,
-        execution?: string,
-    }
+    [key in DateAtt<T>]: DateRangeStatement
 }>
 
-type RangeStatement<T> = {
+export type RangeStatement<T> = {
     "range": NumberRange<T> | DateRange<T>
 }
 
@@ -65,7 +67,7 @@ export type RegexpStatement<T> = {
     }>
 }
 
-export type GeoBoundingBox<T> = {
+export type GeoBoundingBox = {
     geo_bounding_box: {
         point: {
             top_left: {
@@ -93,7 +95,7 @@ export type XYShape<T> = {
 }
 
 
-export export type FuzzyStatement<T> = {
+export type FuzzyStatement<T> = {
     fuzzy:
     RequireExactlyOne<{ [a in att.StringAtt<T>]: {
         value: string,
@@ -146,7 +148,7 @@ export type FilterStatement<T> =
     TermsStatement<T> |
     BoolStatement<T> |
     AndStatement<T> |
-    GeoBoundingBox<T> |
+    GeoBoundingBox |
     XYShape<T> |
     FuzzyStatement<T>
 
