@@ -4,19 +4,18 @@ import * as att from "./attributes"
 import { BooleanStatement } from "./search"
 import type { RequireExactlyOne } from 'type-fest';
 
-
-type RangeDefaults<A> = {
+export type RangeDefaults<A> = {
     gte?: A,
     lte?: A,
     gt?: A,
     lt?: A,
 }
 
-type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExactlyOne<{ [key in B]: R }>
+export type Range<T, B extends string, R extends RangeDefaults<T>> = RequireExactlyOne<{ [key in B]: R }>
 
-type NumberRange<T> = Range<number, NumberAtt<T>, RangeDefaults<number>>
+export type NumberRange<T> = Range<number, NumberAtt<T>, RangeDefaults<number>>
 
-type DateRange<T> = RequireExactlyOne<{
+export type DateRange<T> = RequireExactlyOne<{
     [key in DateAtt<T>]: {
         gte?: Date | string,
         lte?: Date | string,
@@ -32,13 +31,13 @@ type RangeStatement<T> = {
     "range": NumberRange<T> | DateRange<T>
 }
 
-type ExistsStatement<T> = {
+export type ExistsStatement<T> = {
     "exists": {
         "field": AnyAttribute<T>
     }
 }
 
-type PrefixStatement<T> = {
+export type PrefixStatement<T> = {
     "prefix": RequireExactlyOne<{
         [key in TextOrKeywordAtt<T>]: {
             value: string,
@@ -47,7 +46,7 @@ type PrefixStatement<T> = {
     }>
 }
 
-type WildCardStatement<T> = {
+export type WildCardStatement<T> = {
     "wildcard": RequireExactlyOne<{
         [key in TextOrKeywordAtt<T>]: {
             value: string,
@@ -56,7 +55,7 @@ type WildCardStatement<T> = {
     }>
 }
 
-type RegexpStatement<T> = {
+export type RegexpStatement<T> = {
     "regexp": RequireExactlyOne<{
         [key in TextOrKeywordAtt<T>]: {
             value: string,
@@ -66,7 +65,7 @@ type RegexpStatement<T> = {
     }>
 }
 
-type GeoBoundingBox<T> = {
+export type GeoBoundingBox<T> = {
     geo_bounding_box: {
         point: {
             top_left: {
@@ -81,7 +80,7 @@ type GeoBoundingBox<T> = {
     }
 }
 
-type XYShape<T> = {
+export type XYShape<T> = {
     xy_shape: {
         geometry: {
             shape: {
@@ -94,7 +93,7 @@ type XYShape<T> = {
 }
 
 
-export type FuzzyStatement<T> = {
+export export type FuzzyStatement<T> = {
     fuzzy:
     RequireExactlyOne<{ [a in att.StringAtt<T>]: {
         value: string,
