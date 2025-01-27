@@ -131,6 +131,31 @@ export type TermsNumber<T> = Terms<NumberAtt<T>, number>
 export type TermsDate<T> = Terms<DateAtt<T>, Date>
 export type TermsBoolean<T> = Terms<BooleanAtt<T>, boolean>
 
+export type MoreLikeThisStatement<T> = {
+    /** Specify the fields to compare */
+    "fields"?: TermsString<T>[],
+    "like"?: string,
+    /** Minimum term frequency in the source document */
+    "min_term_freq"?: number,
+    /** Maximum number of query terms to use */
+    "max_query_terms"?: number,
+
+
+    /** Minimum number of documents in which a term should appear to be considered. */
+    min_doc_freq: number,
+    /** Maximum number of documents in which a term may appear. */
+    max_doc_freq: number,
+    /** Minimum word length below which terms will be ignored. */
+    min_word_length: number,
+    /** Maximum word length above which terms will be ignored. */
+    max_word_length: number,
+
+
+}
+export type MoreLikeThis<T> = {
+    "more_like_this": MoreLikeThisStatement<T>
+}
+
 export type TermsStatement<T> =
     TermsKeyword<T> |
     TermsString<T> |
@@ -150,7 +175,8 @@ export type FilterStatement<T> =
     AndStatement<T> |
     GeoBoundingBox |
     XYShape<T> |
-    FuzzyStatement<T>
+    FuzzyStatement<T> |
+    MoreLikeThis<T>
 
 export type BoolStatement<T> = {
     bool: BooleanStatement<T>
