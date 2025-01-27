@@ -290,8 +290,8 @@ export type AdjacencyMatrixBucketAgg<T> = {
 
 export type TopHitsAgg<T> = {
     top_hits: {
-        size: number,
-        sort: RequireAtLeastOne<{
+        size?: number,
+        sort?: RequireAtLeastOne<{
             [k in a.AnyAttribute<T>]: {
                 order?: "asc" | "desc"
             }
