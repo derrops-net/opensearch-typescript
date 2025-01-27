@@ -171,7 +171,14 @@ const searchExample: q.Search<ServerLog, {
                     "aggs": {
                         "topHits": {
                             "top_hits": {
-                                "size": 3
+                                "size": 12,
+                                "sort": [
+                                    {
+                                        "@timestamp": {
+                                            "order": "asc"
+                                        }
+                                    }
+                                ]
                             }
                         }
                     }
