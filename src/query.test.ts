@@ -41,6 +41,92 @@ const countAll: CountAllQuery = {
     "size": 0
 }
 
+
+
+const exampleTopHitMax: q.Search<ServerLog, {
+
+    agents: {
+        agg: "terms",
+        aggs: {
+            maxValue: {
+                agg: "max"
+            },
+            minValue: {
+                agg: "min"
+            },
+            maxHits: {
+                agg: "top_hits"
+            },
+            minHits: {
+                agg: "top_hits"
+            }
+        }
+    },
+
+
+}> = {
+    "size": 0,
+    "aggs": {
+
+        "agents": {
+            "terms": {
+                "field": "agent.keyword",
+            },
+            "aggs": {
+
+                "maxValue": {
+                    "max": {
+                        "field": "@timestamp"
+                    }
+                },
+                "maxHits": {
+                    "top_hits": {
+                        "size": 1,
+                        "sort": [
+                            {
+                                "@timestamp": {
+                                    "order": "desc"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "minValue": {
+                    "min": {
+                        "field": "@timestamp"
+                    }
+                },
+                "minHits": {
+                    "top_hits": {
+                        "size": 1,
+                        "sort": [
+                            {
+                                "@timestamp": {
+                                    "order": "asc"
+                                }
+                            }
+                        ]
+                    }
+                }
+
+            }
+        }
+
+
+
+    },
+
+    query: {
+        "match_all": {
+
+        }
+    }
+
+}
+
+
+
+
 const searchMatchAll: q.Search<ServerLog, {}> = {
     query: {
         "match_all": {
@@ -72,7 +158,16 @@ const searchExample: q.Search<ServerLog, {
             "somethingMore": {
                 agg: "terms",
                 aggs: {
-                    "topHits": {
+                    "minValue": {
+                        agg: "min"
+                    },
+                    "minHits": {
+                        agg: "top_hits"
+                    },
+                    "maxValue": {
+                        agg: "max"
+                    },
+                    "maxHits": {
                         agg: "top_hits"
                     }
                 }
@@ -169,9 +264,31 @@ const searchExample: q.Search<ServerLog, {
                         "field": "referer.keyword"
                     },
                     "aggs": {
-                        "topHits": {
+                        "maxValue": {
+                            "max": {
+                                "field": "@timestamp"
+                            }
+                        },
+                        "maxHits": {
                             "top_hits": {
-                                "size": 12,
+                                "size": 2,
+                                "sort": [
+                                    {
+                                        "@timestamp": {
+                                            "order": "desc"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "minValue": {
+                            "min": {
+                                "field": "@timestamp"
+                            }
+                        },
+                        "minHits": {
+                            "top_hits": {
+                                "size": 1,
                                 "sort": [
                                     {
                                         "@timestamp": {
@@ -245,8 +362,10 @@ test("testRawTypes", async () => {
 })
 
 
-test("searchTS", async () => {
-    await tsClient.searchTS({ body: searchExample, index: INDEX_LOGS })
+test("searchTS222", async () => {
+    const response = await tsClient.searchTS({ body: searchExample, index: INDEX_LOGS })
+
+
     console.log(
         searchExample.response.aggregations.exampleDateHist.buckets.flatMap(
             b => b.agentTerms.buckets
@@ -264,5 +383,24 @@ test("searchTS", async () => {
     //         .buckets.flatMap(a => ({doc_count : a.doc_count, key : `${b.key}.${a.key}`}))), null, 2))
 })
 
+
+
+
+test("exampleTopHitMax", async () => {
+
+    const response = await tsClient.searchTS({ body: exampleTopHitMax, index: INDEX_LOGS })
+
+    console.log(JSON.stringify(response.aggregations.agents.buckets.flatMap(agent => ({
+
+        minFromMin: agent.minValue.value_as_string,
+        minFromDoc: agent.minHits.hits.hits[0]._source.timestamp,
+        minDoc: agent.minHits.hits.hits[0],
+
+        maxFromMin: agent.maxValue.value_as_string,
+        maxFromDoc: agent.maxHits.hits.hits[0]._source.timestamp,
+        maxDoc: agent.maxHits.hits.hits[0],
+
+    })), null, 2))
+})
 
 
