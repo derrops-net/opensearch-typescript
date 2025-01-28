@@ -301,10 +301,19 @@ export type TopHitsAgg<T> = {
 
 
 
-export type RangeAgg<T> = {
+export type RangeArrayAgg<T> = {
     range: {
         field: a.StatsAttribute<T>,
-        keyed: boolean,
+        keyed: false | undefined,
+        ranges: { from: number | Date, to: number | Date }[]
+    }
+}
+
+
+export type RangeDictAgg<T> = {
+    range: {
+        field: a.StatsAttribute<T>,
+        keyed: true,
         ranges: { from: number | Date, to: number | Date }[]
     }
 }

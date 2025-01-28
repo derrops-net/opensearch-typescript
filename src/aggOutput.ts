@@ -290,14 +290,27 @@ export type AdjacencyMatrixAggResp = {
     buckets: AggBucket[]
 }
 
-export type RangeResp = {
-    buckets: {
-        [k: string]: {
-            from: number | Date,
-            to: number | Date,
-            doc_count: number
-        }
+
+
+export type RangeRespDict = {
+    [k: string]: {
+        from: number | Date,
+        to: number | Date,
+        doc_count: number
     }
+}
+
+export type RangeRespArr = {
+    key: string,
+    from: number | Date,
+    to: number | Date,
+    doc_count: number
+}[]
+
+
+
+export type RangeResp = {
+    buckets: RangeRespDict & RangeRespArr
 }
 
 

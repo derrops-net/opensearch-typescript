@@ -105,7 +105,8 @@ export type Agg<T> =
     agg.AdjacencyMatrixBucketAgg<T> |
     agg.DateHistBucketAgg<T> |
     agg.TopHitsAgg<T> |
-    agg.RangeAgg<T> |
+    agg.RangeArrayAgg<T> |
+    agg.RangeDictAgg<T> |
     agg.FilterAgg<T> |
     agg.FiltersAgg<T> |
     agg.MultiTermsAgg<T>
@@ -161,7 +162,7 @@ type AggTypeDictionary<T, AT extends AggType> =
     AT extends "cardinality" ? agg.CardAgg<T> :
     AT extends "adjacency_matrix" ? agg.AdjacencyMatrixBucketAgg<T> :
     AT extends "top_hits" ? agg.TopHitsAgg<T> :
-    AT extends "range" ? agg.RangeAgg<T> :
+    AT extends "range" ? agg.RangeArrayAgg<T> | agg.RangeDictAgg<T> :
     AT extends "filter" ? agg.FilterAgg<T> :
     AT extends "filters" ? agg.FiltersAgg<T> :
     never;
