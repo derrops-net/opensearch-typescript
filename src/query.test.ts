@@ -13,6 +13,9 @@ const INDEX_LOGS = "opensearch_dashboards_sample_data_logs"
 var esClient: os.Client
 var tsClient: TypescriptOSProxyClient
 
+jest.setTimeout(20_000)
+
+
 beforeAll(async () => {
     esClient = await makeClientWithEndpoint()
     tsClient = new TypescriptOSProxyClient(esClient)

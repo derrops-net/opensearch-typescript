@@ -94,7 +94,7 @@ export class TypescriptOSProxyClient {
 
         const responses = (await this.esClient.msearch({ body: msearch, index }, options)).body.responses
         responses.forEach((resp, i) => {
-            msearchTs[i].response = resp
+            msearchTs[i].response = resp as q.SearchResponse<T, A>
         });
 
         return msearchTs.map((search, i) => new ResponseParser(search).parseSearchResponse(responses[i]))

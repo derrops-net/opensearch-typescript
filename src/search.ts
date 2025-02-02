@@ -1,3 +1,5 @@
+import { ShardStatistics } from "@opensearch-project/opensearch/api/_types/_common"
+import { TotalHits } from "@opensearch-project/opensearch/api/_types/_core.search"
 import { RequireAtLeastOne, RequireExactlyOne } from "type-fest"
 import { AggTypeDictionaryRecursive, AggsQuery } from "./aggInput"
 import { AggTypeResponseDictionary2 } from "./aggOutput"
@@ -24,10 +26,7 @@ export type Document<T> = {
  * Represents (Hits|Search Results)
  */
 export type Hits<T> = {
-    "total": {
-        "value": number,
-        "relation": string
-    },
+    "total": number & TotalHits,
     "max_score": any,
     "hits": Document<T>[]
 }
@@ -209,16 +208,24 @@ export type Search<T, A extends AggsQuery> = {
 }
 
 
+/**
+ * Type 'ResponseItem' is not assignable to type 'SearchResponse<T, A>'.
+  Type 'MultiSearchItem' is not assignable to type 'SearchResponse<T, A>'.
+    Types of property '"_shards"' are incompatible.
+      Type 'ShardStatistics' is not assignable to type 'ShardsHitResult'.
+        Property '"skipped"' is optional in type 'ShardStatistics' but required in type 'ShardsHitResult'.
+ */
+
 
 /**
  * Details of the Shards Hit
  */
-export type ShardsHitResult = {
-    "total": number,
-    "successful": number,
-    "skipped": number,
-    "failed": number
-}
+// export type ShardsHitResult = {
+//     "total": number,
+//     "successful": number,
+//     "skipped": number,
+//     "failed": number
+// }
 
 
 /**
@@ -227,7 +234,7 @@ export type ShardsHitResult = {
 export type SearchResponse<T, A extends AggsQuery> = {
     "took": number,
     "timed_out": boolean,
-    "_shards": ShardsHitResult,
+    "_shards": ShardStatistics,
     "hits": Hits<T>,
     "aggregations"?: { [K in keyof A]: AggTypeResponseDictionary2<T, A[K]["agg"], A[K]["aggs"]> },
 }
