@@ -37,10 +37,10 @@ export type Source<T> = {
 }
 
 export type BooleanStatement<T> = {
-    should?: f.FilterStatement<T>[],
-    filter?: f.FilterStatement<T>[],
-    must?: f.FilterStatement<T>[],
-    must_not?: f.FilterStatement<T>[],
+    should?: f.FilterStatement<T>[] | f.FilterStatement<T>,
+    filter?: f.FilterStatement<T>[] | f.FilterStatement<T>,
+    must?: f.FilterStatement<T>[] | f.FilterStatement<T>,
+    must_not?: f.FilterStatement<T>[] | f.FilterStatement<T>,
     minimum_should_match?: number,
 }
 
