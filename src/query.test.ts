@@ -407,3 +407,88 @@ test("exampleTopHitMax", async () => {
 })
 
 
+
+test("single example match and filter", async () => {
+
+    const matchAndFilter: q.Search<ServerLog, {}> = {
+        query:
+        {
+            "bool": {
+                "must": {
+                    "match": {
+                        "agent": {
+                            "query": "Chrome"
+                        }
+                    }
+                }
+            }
+        },
+        size: 5
+    }
+
+
+    const response = await tsClient.searchTS({ body: matchAndFilter, index: INDEX_LOGS })
+
+    console.log(JSON.stringify(response, null, 2))
+
+})
+
+
+test("multi example match and filter", async () => {
+
+    const matchAndFilter: q.Search<ServerLog, {}> = {
+        query:
+        {
+            "bool": {
+                "must": {
+                    "match": {
+                        "agent": {
+                            "query": "Chrome"
+                        }
+                    }
+                },
+                "filter": {
+                    "term": {
+                        "extension.keyword": "zip"
+                    }
+                }
+            }
+        },
+        size: 5
+    }
+
+
+    const response = await tsClient.searchTS({ body: matchAndFilter, index: INDEX_LOGS })
+
+    console.log(JSON.stringify(response, null, 2))
+
+})
+
+
+test("multi example match and filter", async () => {
+
+    const matchAndFilter: q.Search<ServerLog, {}> = {
+        query:
+        {
+            "bool": {
+                "must": {
+                    "match": {
+                        "agent": "Chrome"
+                    }
+                },
+                "filter": {
+                    "term": {
+                        "extension.keyword": "zip"
+                    }
+                }
+            }
+        },
+        size: 5
+    }
+
+
+    const response = await tsClient.searchTS({ body: matchAndFilter, index: INDEX_LOGS })
+
+    console.log(JSON.stringify(response, null, 2))
+
+})

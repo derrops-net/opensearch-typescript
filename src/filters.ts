@@ -109,6 +109,37 @@ export type FuzzyStatement<T> = {
     }>
 }
 
+
+export type Match<A extends string, V> = {
+    "match": {
+        [k in keyof RequireExactlyOne<{ [key in A]: V }>]: {
+            query: string,
+            auto_generate_synonyms_phrase_query?: boolean,
+            analyzer?: string,
+            boost?: number,
+            enable_position_increments?: boolean,
+            fuzziness?: string,
+            fuzzy_rewrite?: string,
+            fuzzy_transpositions?: boolean,
+            lenient?: boolean,
+            max_expansions?: number,
+            minimum_should_match?: number,
+            operator?: string,
+            prefix_length?: number,
+            zero_terms_query?: string
+        } | string
+    }
+}
+export type MatchKeyword<T> = Match<KeyWord<T>, string>
+export type MatchString<T> = Match<StringAtt<T>, string>
+// export type MatchNumber<T> = Match<NumberAtt<T>, number>
+// export type MatchBoolean<T> = Match<BooleanAtt<T>, boolean>
+// export type MatchDate<T> = Match<DateAtt<T>, Date>
+export type MatchStatement<T> =
+    MatchKeyword<T> |
+    MatchString<T>
+
+
 export type Term<A extends string, V> = { "term": RequireExactlyOne<{ [key in A]: V }> }
 export type TermKeyword<T> = Term<KeyWord<T>, string>
 export type TermString<T> = Term<StringAtt<T>, string>
@@ -124,6 +155,7 @@ export type TermStatement<T> =
     TermBoolean<T>
 
 export type Terms<A extends string, V> = { "terms": RequireExactlyOne<{ [key in A]: V[] }> }
+
 
 export type TermsKeyword<T> = Terms<KeyWord<T>, string>
 export type TermsString<T> = Terms<StringAtt<T>, string>
@@ -171,6 +203,8 @@ export type FilterStatement<T> =
     RangeStatement<T> |
     TermStatement<T> |
     TermsStatement<T> |
+    MatchStatement<T> |
+    // MatchesStatement<T> |
     BoolStatement<T> |
     AndStatement<T> |
     GeoBoundingBox |
