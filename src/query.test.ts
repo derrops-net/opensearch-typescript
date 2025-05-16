@@ -434,12 +434,29 @@ test("single example match and filter", async () => {
 })
 
 
-test("Filter by ID example", async () => {
+test("Filter by IDs example", async () => {
 
     const matchAndFilter: q.Search<ServerLog, {}> = {
         "query": {
             "terms": {
                 "_id": ["hello", "abcd-1234"]
+            }
+        }
+    }
+
+    const response = await tsClient.searchTS({ body: matchAndFilter, index: INDEX_LOGS })
+
+    console.log(JSON.stringify(response, null, 2))
+
+})
+
+
+test("Filter by ID example", async () => {
+
+    const matchAndFilter: q.Search<ServerLog, {}> = {
+        "query": {
+            "term": {
+                "_id": "2345"
             }
         }
     }
