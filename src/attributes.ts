@@ -37,10 +37,10 @@ export type HiddenSearchableAttributes = "_id"
 
 
 export type BooleanAtt<T> = DeepKeysMatching<T, boolean>
-export type StringAtt<T> = DeepKeysMatching<T, string>
+export type StringAtt<T> = DeepKeysMatching<T, string> | HiddenSearchableAttributes
 export type NumberAtt<T> = DeepKeysMatching<T, number>
 export type DateAtt<T> = DeepKeysMatching<T, Date>
-export type KeyWord<T> = addSuffix<StringAtt<T>, '.keyword'> | HiddenSearchableAttributes
+export type KeyWord<T> = addSuffix<StringAtt<T>, '.keyword'>
 export type GeoPointAtt<T> = DeepKeysMatching<T, GeoPoint>;
 
 
